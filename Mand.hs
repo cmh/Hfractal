@@ -24,7 +24,6 @@ inializeScreen = do
 setCallBacks :: IO()
 setCallBacks = do
 	ms <- newIORef state1
-	angle <- newIORef (0.0 :: GLfloat)
 	reshapeCallback $= Just reshape
 	idleCallback $= Just idle
 	keyboardMouseCallback $= Just (keyboardMouse ms)
