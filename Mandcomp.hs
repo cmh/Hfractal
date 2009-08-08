@@ -1,8 +1,8 @@
+{-# LANGUAGE BangPatterns #-}
 module Mandcomp (compMandPoints)
   where
 
 import Control.Parallel.Strategies
---import Data.Array.Parallel.Prelude
 
 {-
 import Prelude hiding (map)
@@ -12,6 +12,7 @@ import Data.List.Stream
 import Graphics.Rendering.OpenGL
 import Graphics.UI.GLUT
 import Mandstate
+
 instance (Num a) => NFData (Color3 a)
 
 maxIter = 400
@@ -21,14 +22,16 @@ chunkSize = (width * height) `div` (4 * 20)
 
 compMandPoints :: Double -> Double -> Double -> Double -> [(Int, Int, Color3 GLdouble)]
 compMandPoints xmid ymid range cm = parMapChunk chunkSize rnf (\(x,y) -> (x, y, mandPoint 0 0.0 0.0 ((range*normx x) + xmid) ((range*normy y) + ymid) cm)) [ (x,y) | x <- [0  .. width-1], y <- [0 .. height-1] ] where
-  normx i = (fromIntegral i - fromIntegral w2) / fromIntegral w2
-  normy j = (fromIntegral j - fromIntegral h2) / fromIntegral h2
+  normx i = (fi i - fi w2) / fi w2
+  normy j = (fi j - fi h2) / fi h2
+
+fi = fromIntegral
 
 -- Number of iterations to escape
 mandPoint :: Int -> Double -> Double -> Double -> Double -> Double -> Color3 GLdouble
-mandPoint n x y cx cy cm | n > maxIter = Color3 0 0 0
-						 | (x*x + y*y) > 4.0	= colorMand x y n cm
-						 | otherwise		= mandPoint (n+1) (x*x - y*y + cx) (2*x*y + cy) cx cy cm
+mandPoint !n !x !y cx cy cm | n > maxIter       = Color3 0 0 0
+							| (x*x + y*y) > 4.0 = colorMand x y n cm
+							| otherwise		 = mandPoint (n+1) (x*x - y*y + cx) (2*x*y + cy) cx cy cm
 
 -- Color a vertex
 colorMand :: Double -> Double -> Int -> Double -> Color3 GLdouble

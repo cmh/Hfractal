@@ -6,7 +6,7 @@ import Data.IORef
 import Mandstate
 import System.Exit
 
-rangemul = 1.03
+rangemul = 1.02
 cmul = 1.3
 
 keyboardAct :: IORef Mandstate -> Key -> KeyState -> IO ()
