@@ -30,6 +30,6 @@ mandPoint !n !x !y cx cy cm | n > maxIter       = Color3 0 0 0
 colorMand :: Double -> Double -> Int -> Double -> Color3 GLdouble
 colorMand x y n cm = fmap realToFrac $ Color3 r g b where
 	m = 1.0 - (logBase 2 (logBase 2 $ sqrt (x*x + y*y))) + fromIntegral n
-	r = 0.2 + 0.8 * cos (m * cm) 
-	g = 0.4 + 0.6 * cos ((m + 16.0) * cm)
+	r = 0.5 + 0.5 * cos (m * cm) 
+	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
