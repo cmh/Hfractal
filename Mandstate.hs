@@ -1,8 +1,8 @@
 module Mandstate
   where
 
-w2 = 300 :: Int
-h2 = 300 :: Int
+w2 = 400 :: Int
+h2 = 400 :: Int
 width = 2*w2
 height = 2*h2
 

@@ -5,13 +5,13 @@ import Graphics.GD
 import System.IO
 import Graphics.Rendering.OpenGL
 
-filepath = "imgs2/tmp" :: FilePath
+filepath = "imgs/tmp" :: FilePath
 
-convColour :: Color3 Double -> Graphics.GD.Color
+convColour :: Color3 GLdouble -> Graphics.GD.Color
 convColour (Color3 r g b) = rgb (f r) (f g) (f b) where
 	f = (floor . (* 256))
 
-pixel ::  Image -> (Int, Int, Color3 Double) -> IO ()
+pixel ::  Image -> (Int, Int, Color3 GLdouble) -> IO ()
 pixel im (x, y, c) = setPixel (x,y) (convColour c) im
 
 imagAt ::  FilePath -> Double -> Double -> Double -> Double -> IO ()
@@ -26,4 +26,4 @@ imgrange xm ym cm initrange scale num rootfp = mapM_ (\(fn, r) -> imagAt fn xm y
 	ranges = take num $ iterate (/scale) initrange
 
 main = do
-	imgrange 0.001643721971153 0.822467633298876 0.0525 2.0 1.01 5000 filepath
+	imgrange 0.001643721971153 0.822467633298876 0.0525 2.0 1.01 50 filepath
