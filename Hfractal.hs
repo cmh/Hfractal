@@ -49,7 +49,7 @@ displayPix sz@(Sz width height) cm pixarr = go 0 0 where
 	go !x !y | y == height = return ()
 	         | x == width  = go 0 (y+1)	
 			 | otherwise   = do
-		dk <- readArray pixarr (width*x + y)
+		dk <- readArray pixarr (x + y*width)
 		color (colourMand dk cm)
 		vertex $ Vertex2 (fromIntegral x) (fromIntegral y :: GLfloat)
 		go (x+1) y

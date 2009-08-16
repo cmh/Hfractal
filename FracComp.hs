@@ -23,7 +23,7 @@ compPoints xm ym rng sz@(Sz width height) arr = go 0 0 where
 			 | otherwise = do 
 		writeArray arr k (mandPoint 0 0.0 0.0 cx cy)
 		go (x+1) y where
-			k = x*width + y
+			k = x + y*width
 			fi = fromIntegral
 			cx = rng * (fi x - fi w2) / fi w2 + xm :: Double
 			cy = rng * (fi y - fi h2) / fi h2 + ym :: Double

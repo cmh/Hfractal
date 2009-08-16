@@ -2,6 +2,6 @@ OpenGL Fractal renderer. Currently only renders the Mandelbrot set, but can (and
 
 Controls:
 Arrow keys   -    Movement
-+/-			 -    Zoom in/out
-a/s			 -    Alter colouring gradient
-p		     -    Print a hi-res image of the current location in the working direction
++/-          -    Zoom in/out
+a/s          -    Alter colouring gradient
+p            -    Print a hi-res image of the current location in the working direction
