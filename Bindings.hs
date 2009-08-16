@@ -6,6 +6,7 @@ import Data.IORef
 import System.Exit
 
 import FracState
+import FracImg
 
 --TODO. Clean up by using Data.Accessor
 keyboardAct :: IORef Mandstate -> Key -> KeyState -> IO ()
@@ -25,5 +26,11 @@ keyboardAct ms (Char 'a') Down = do
   modifyIORef ms (\m@Mandstate{colourmul=cm} -> m{colourmul=cm*cmul})
 keyboardAct ms (Char 's') Down = do
   modifyIORef ms (\m@Mandstate{colourmul=cm} -> m{colourmul=cm/cmul})
+keyboardAct ms (Char 'p') Down = do
+  ms' <- readIORef ms
+  imagAt "frac.png" ms'
+keyboardAct ms (Char 'o') Down = do
+  ms' <- readIORef ms
+  print ms'
 keyboardAct _ (Char '\27') _ = exitWith ExitSuccess
 keyboardAct _ _ _ = return ()

@@ -75,11 +75,6 @@ zeroState = Mandstate {xmid = 0.0, ymid = 0.0, range = 2.0, colourmul = 0.05}
 state1    = Mandstate {xmid = 0.001643721971153, ymid = 0.822467633298876, range = 0.05, colourmul = 0.0625}
 state = state1
 
-data Options = Options
-	{ size :: Sz,
-	  ms   :: Mandstate   
-	} deriving (Eq, Show)
-
 defOpts = Options {size=Sz 300 300, ms=state}
 
 --TODO: Tidy up the option parser with Data.Accessor(.Template)

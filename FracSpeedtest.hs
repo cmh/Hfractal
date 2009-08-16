@@ -1,10 +1,9 @@
-import Mandcomp
+import FracComp
+import FracState
 import Data.Time.Clock
 import Data.Array.IO
-import Mandstate
 
-testWidth = 800
-testHeight = 800
+(testWidth, testHeight) = (800, 800)
 
 main = do
 	start <- getCurrentTime

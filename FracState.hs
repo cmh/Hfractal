@@ -18,3 +18,10 @@ data Mandstate = Mandstate {
   ymid :: Double,
   range :: Double,
   colourmul :: Double } deriving (Eq, Show)
+
+data Sz = Sz Int Int deriving (Eq, Show)
+
+data Options = Options
+	{ size :: Sz,
+	  ms   :: Mandstate   
+	} deriving (Eq, Show)

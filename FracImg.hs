@@ -5,23 +5,29 @@ import FracComp
 import FracState
 
 import Graphics.GD
+import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-imgSize = (1000, 1000)
+w = 1200
+h = 1200
 filepath = "." :: FilePath
 
 convColour :: Color3 GLdouble -> Graphics.GD.Color
 convColour (Color3 r g b) = rgb (f r) (f g) (f b) where
 	f = (floor . (* 256))
 
-pixel ::  Image -> Double -> Double -> IO ()
-pixel im cm p = setPixel (x,y) (convColour $ mandColour p c) im
+--pixel ::  Image -> Double -> (Int, Double) -> IO ()
+pixel im cm pixarr k = do 
+	p <- readArray pixarr k
+	setPixel (k `divMod` h) (convColour $ colourMand p cm) im
 
-imagAt ::  FilePath -> Double -> Double -> Double -> Double -> IO ()
-imagAt fp Opt@Option{size=Sz w h, ms=Mandstate xm ym rng cm} = do
-	im <- newImage imgSize
-	mapM_ (pixel im cm) $ (compPoints xm ym r)
+imagAt ::  FilePath -> Mandstate -> IO ()
+imagAt fp Mandstate{xmid=xm, ymid=ym, range=rng, colourmul=cm} = do
+	pixarr <- newArray (0, (w-1)*(h-1)) 0.0 :: IO Pix
+	im <- newImage (w, h)
+	compPoints xm ym rng (Sz w h) pixarr
+	mapM_ (pixel im cm pixarr) $ take ((h-1)*(w-1)) indicies
 	savePngFile fp im
 
 {-
