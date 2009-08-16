@@ -1,20 +1,20 @@
 module Mandstate
   where
 
-maxIter,w2,h2,width,height :: Int
-(w2, h2)		= (250, 250)
-(width, height) = (2*w2, 2*h2) 
+maxIter, maxWidth, maxHeight :: Int
 maxIter = 500
+(maxWidth, maxHeight) = (2000,2000)
+
+--Keep the indicies as a global list so they aren't recopmuted every rendering
+indicies :: [Int]
+indicies = [0 .. (maxWidth-1)*(maxHeight-1)]
 
 rangemul, cmul :: Double
 rangemul = 1.02
 cmul     = 1.3
 
-indicies :: [(Int,Int)]
-indicies = [(i,j) | i <- [1..(width-1)], j <- [1..(height-1)]] :: [(Int,Int)]
-
 data Mandstate = Mandstate {
   xmid :: Double,
   ymid :: Double,
   range :: Double,
-  colourmul :: Double } deriving Eq
+  colourmul :: Double } deriving (Eq, Show)

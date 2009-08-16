@@ -3,9 +3,12 @@ import Data.Time.Clock
 import Data.Array.IO
 import Mandstate
 
+testWidth = 800
+testHeight = 800
+
 main = do
 	start <- getCurrentTime
-	pixarr <- newArray (0, width*height-1) 0.0 :: IO Pix
-	mapM_ (\r -> compPoints 0.002 0.8 r pixarr) [0.1, 0.15 .. 1.0]
+	pixarr <- newArray (0, testWidth*testHeight-1) 0.0 :: IO Pix
+	mapM_ (\r -> compPoints 0.002 0.8 r (Sz testWidth testHeight) pixarr) [0.1, 0.15 .. 1.0]
 	end <- getCurrentTime
 	putStrLn $ show (end `diffUTCTime` start) ++ " elapsed."

@@ -6,6 +6,7 @@ import Data.IORef
 import Mandstate
 import System.Exit
 
+--Update with the Data.Accessor stuff
 keyboardAct :: IORef Mandstate -> Key -> KeyState -> IO ()
 keyboardAct ms (SpecialKey KeyLeft) Down = do
   modifyIORef ms (\m@Mandstate{xmid=x,range=r} -> m{xmid=x - 0.1*r})

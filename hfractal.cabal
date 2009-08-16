@@ -11,5 +11,5 @@ build-type:          Simple
 
 Executable hfractal
     main-is:            Hfractal.hs
-    build-depends:      base >3 && <4, array, OpenGL, GLUT 
+    build-depends:      base >3 && <4, array, data-accessor, data-accessor-template, OpenGL, GLUT
     ghc-options:          
