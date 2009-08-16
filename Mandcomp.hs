@@ -2,14 +2,12 @@
 module Mandcomp
   where
 
-import Control.Parallel.Strategies
 import Graphics.UI.GLUT
 import Data.Array.IO
 
 import Mandstate
 
 type Pix = IOUArray Int Double
-instance (Num a) => NFData (Color3 a)
 
 -- Number of iterations to escape
 mandPoint :: Int -> Double -> Double -> Double -> Double -> Double

@@ -2,10 +2,8 @@ module Mandstate
   where
 
 maxIter,w2,h2,width,height :: Int
-w2 = 250 
-h2 = 250 
-width = 2*w2 
-height = 2*h2 
+(w2, h2)		= (250, 250)
+(width, height) = (2*w2, 2*h2) 
 maxIter = 500
 
 rangemul, cmul :: Double
