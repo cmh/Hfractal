@@ -2,7 +2,6 @@ name:                hfractal
 version:             0.1.0
 cabal-version:		 >= 1.2
 synopsis:            OpenGL fractal renderer
-description:         <Project description>
 category:            Graphics
 license:             BSD3
 author:              Chris Holdsworth
@@ -11,5 +10,5 @@ build-type:          Simple
 
 Executable hfractal
     main-is:            Hfractal.hs
-    build-depends:      base >3 && <4, array, data-accessor, data-accessor-template, OpenGL, GLUT
+    build-depends:      base >3 && <4, array, data-accessor, data-accessor-template, gd, OpenGL, GLUT
     ghc-options:        -O2
