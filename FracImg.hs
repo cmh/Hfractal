@@ -1,29 +1,32 @@
-import Mandcomp
-import Mandstate
+module FracImg
+	where
+
+import FracComp
+import FracState
 
 import Graphics.GD
 import System.IO
 import Graphics.Rendering.OpenGL
 
-filepath = "imgs/tmp" :: FilePath
+imgSize = (1000, 1000)
+filepath = "." :: FilePath
 
 convColour :: Color3 GLdouble -> Graphics.GD.Color
 convColour (Color3 r g b) = rgb (f r) (f g) (f b) where
 	f = (floor . (* 256))
 
-pixel ::  Image -> (Int, Int, Color3 GLdouble) -> IO ()
-pixel im (x, y, c) = setPixel (x,y) (convColour c) im
+pixel ::  Image -> Double -> Double -> IO ()
+pixel im cm p = setPixel (x,y) (convColour $ mandColour p c) im
 
 imagAt ::  FilePath -> Double -> Double -> Double -> Double -> IO ()
-imagAt fp xm ym cm r = do
-	im <- newImage (width, height) 
-	mapM_ (pixel im) $ (compMandPoints xm ym r cm)
+imagAt fp Opt@Option{size=Sz w h, ms=Mandstate xm ym rng cm} = do
+	im <- newImage imgSize
+	mapM_ (pixel im cm) $ (compPoints xm ym r)
 	savePngFile fp im
 
+{-
 imgrange :: Double-> Double-> Double-> Double-> Double-> Int-> [Char]-> IO ()
 imgrange xm ym cm initrange scale num rootfp = mapM_ (\(fn, r) -> imagAt fn xm ym cm r) $ zip fns ranges where
 	fns = map (\s -> rootfp ++ show (100000 + s) ++ ".png") [1..num]
 	ranges = take num $ iterate (/scale) initrange
-
-main = do
-	imgrange 0.001643721971153 0.822467633298876 0.0525 2.0 1.01 50 filepath
+-}

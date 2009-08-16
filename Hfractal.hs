@@ -5,8 +5,8 @@ import System.Console.GetOpt
 import System.Environment (getArgs)
 
 import Bindings
-import Mandstate
-import Mandcomp
+import FracState
+import FracComp
 
 inializeScreen opts@Options{size=Sz w h} = do
 	(progname,_) <- getArgsAndInitialize
@@ -14,8 +14,8 @@ inializeScreen opts@Options{size=Sz w h} = do
 	lineSmooth  $= Enabled
 	blendFunc   $= (SrcAlpha, OneMinusSrcAlpha)
 	createWindow "HFractal"
-	windowSize $= Size (fromIntegral (w-1)) (fromIntegral (h-1))
-	clearColor $= Color4 0 0 0 0
+	windowSize $= Size (fromIntegral (w-2)) (fromIntegral (h-1))
+	--clearColor $= Color4 0 0 0 0
 	matrixMode $= Projection
 	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
 	matrixMode $= Modelview 0
@@ -47,7 +47,7 @@ displayPix :: Double -> Int -> IOUArray Int Double -> Int -> IO ()
 displayPix cm h pixarr k = do
 	let (i,j) = k `divMod` h
 	dk <- readArray pixarr k
-	color (colorMand dk cm)
+	color (colourMand dk cm)
 	vertex $ Vertex2 (fromIntegral i) (fromIntegral j :: GLfloat)
 
 -----------------------------------------
@@ -58,9 +58,9 @@ idle ::  IO ()
 idle = do
 	postRedisplay Nothing
 
-reshape opts s' = do
+reshape opts s'@(Size w h) = do
 	viewport $= (Position 0 0, s')
-	--setCallBacks opts{size=s'} --Reset the callbacks so that the pixarr is recreated
+	--setCallBacks opts{size=Sz (fromIntegral w) (fromIntegral h)} --Reset the callbacks so that the pixarr is recreated
 	postRedisplay Nothing
 
 keyboardMouse ms key state _ _ = do

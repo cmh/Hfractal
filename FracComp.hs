@@ -1,11 +1,11 @@
 {-# LANGUAGE BangPatterns #-}
-module Mandcomp
+module FracComp
   where
 
 import Graphics.UI.GLUT
 import Data.Array.IO
 
-import Mandstate
+import FracState
 
 type Pix = IOUArray Int Double
 data Sz = Sz Int Int deriving (Eq, Show)
@@ -28,16 +28,17 @@ compPoints xm ym rng sz@(Sz width height) arr = mapM_ (\k -> writePix k arr) $ t
 		(w2, h2) = (width `div` 2, height `div` 2)
 
 -- Colour a vertex
-colorMand :: Double -> Double -> Color3 GLdouble
-colorMand 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colorMand m cm = fmap realToFrac $ Color3 r g b where
+colourMand :: Double -> Double -> Color3 GLdouble
+colourMand 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
+colourMand m cm = fmap realToFrac $ Color3 r g b where
 	r = 0.5 + 0.5 * cos (m * cm) 
 	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
 -----------------------------------------
---Think of some QuickCheck propositions
+--QuickCheck Properties
 -----------------------------------------
+--TODO: Conjure up some more properties
 
 prop_reflection :: Double -> Double -> Bool
 prop_reflection x y = mandPoint 0 0.0 0.0 x y == mandPoint 0 0.0 0.0 x (-y)

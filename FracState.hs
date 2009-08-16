@@ -1,9 +1,9 @@
-module Mandstate
+module FracState
   where
 
 maxIter, maxWidth, maxHeight :: Int
 maxIter = 500
-(maxWidth, maxHeight) = (2000,2000)
+(maxWidth, maxHeight) = (1200,1200)
 
 --Keep the indicies as a global list so they aren't recopmuted every rendering
 indicies :: [Int]
