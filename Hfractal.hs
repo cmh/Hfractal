@@ -1,3 +1,4 @@
+{-# LANGUAGE BangPatterns #-}
 import Graphics.UI.GLUT
 import Data.IORef
 import Data.Array.IO hiding (range)
@@ -23,7 +24,7 @@ inializeScreen opts@Options{size=Sz w h} = do
 setCallBacks opts@Options{size=s@(Sz w h), ms=state} = do
 	--Create the state and pixel array
 	ms <- newIORef state
-	pixarr <- newArray (0, (w-1)*(h-1)) 0.0 :: IO Pix
+	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	--Set the callbacks
 	reshapeCallback $= Just (reshape opts)
 	idleCallback $= Just idle
@@ -40,15 +41,18 @@ display ms sz@(Sz w h) pixarr = do
 	Mandstate{xmid=x, ymid=y, range=r, colourmul=cm} <- get ms
 	compPoints x y r sz pixarr
 	preservingMatrix $ do
-		renderPrimitive Points $ mapM_ (displayPix cm h pixarr) $ take ((w-1)*(h-1)) indicies
+		renderPrimitive Points $ displayPix sz cm pixarr
 	swapBuffers
 
-displayPix :: Double -> Int -> IOUArray Int Double -> Int -> IO ()
-displayPix cm h pixarr k = do
-	let (i,j) = k `divMod` h
-	dk <- readArray pixarr k
-	color (colourMand dk cm)
-	vertex $ Vertex2 (fromIntegral i) (fromIntegral j :: GLfloat)
+displayPix :: Sz -> Double -> IOUArray Int Double -> IO ()
+displayPix sz@(Sz width height) cm pixarr = go 0 0 where
+	go !x !y | y == height = return ()
+	         | x == width  = go 0 (y+1)	
+			 | otherwise   = do
+		dk <- readArray pixarr (width*x + y)
+		color (colourMand dk cm)
+		vertex $ Vertex2 (fromIntegral x) (fromIntegral y :: GLfloat)
+		go (x+1) y
 
 -----------------------------------------
 --Other Callbacks
@@ -75,7 +79,7 @@ zeroState = Mandstate {xmid = 0.0, ymid = 0.0, range = 2.0, colourmul = 0.05}
 state1    = Mandstate {xmid = 0.001643721971153, ymid = 0.822467633298876, range = 0.05, colourmul = 0.0625}
 state = state1
 
-defOpts = Options {size=Sz 300 300, ms=state}
+defOpts = Options {size=Sz 400 400, ms=state}
 
 --TODO: Tidy up the option parser with Data.Accessor(.Template)
 options :: [OptDescr (Options -> Options)]

@@ -9,8 +9,8 @@ import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-w = 1200
-h = 1200
+w = 1600
+h = 1600
 filepath = "." :: FilePath
 
 convColour :: Color3 GLdouble -> Graphics.GD.Color
@@ -24,7 +24,7 @@ pixel im cm pixarr k = do
 
 imagAt ::  FilePath -> Mandstate -> IO ()
 imagAt fp Mandstate{xmid=xm, ymid=ym, range=rng, colourmul=cm} = do
-	pixarr <- newArray (0, (w-1)*(h-1)) 0.0 :: IO Pix
+	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	im <- newImage (w, h)
 	compPoints xm ym rng (Sz w h) pixarr
 	mapM_ (pixel im cm pixarr) $ take ((h-1)*(w-1)) indicies
