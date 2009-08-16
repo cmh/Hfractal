@@ -7,6 +7,7 @@ license:             BSD3
 author:              Chris Holdsworth
 maintainer:          chrisholdsworth@gmail.com
 build-type:          Simple
+extra-source-files:  README
 
 Executable hfractal
     main-is:            Hfractal.hs
