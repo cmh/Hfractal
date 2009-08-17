@@ -18,7 +18,7 @@ data Mandstate = Mandstate {
   ymid_ :: Double,
   range_ :: Double,
   colourmul_ :: Double,
-  maxIter_ :: Int} deriving (Eq, Show) 
+  maxiter_ :: Int} deriving (Eq, Show) 
 $( deriveAccessors ''Mandstate )
 
 data Sz = Sz {
