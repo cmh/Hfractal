@@ -4,6 +4,7 @@ module Bindings
 import Graphics.UI.GLUT
 import Data.IORef
 import System.Exit
+import Data.Accessor
 
 import FracState
 import FracImg
@@ -11,21 +12,29 @@ import FracImg
 --TODO. Clean up by using Data.Accessor
 keyboardAct :: IORef Mandstate -> Key -> KeyState -> IO ()
 keyboardAct ms (SpecialKey KeyLeft) Down = do
-  modifyIORef ms (\m@Mandstate{xmid=x,range=r} -> m{xmid=x - 0.1*r})
+  ms' <- readIORef ms
+  modifyIORef ms (xmid ^: ((+) ( -0.05 * ms'^.range)))
 keyboardAct ms (SpecialKey KeyRight) Down = do
-  modifyIORef ms (\m@Mandstate{xmid=x,range=r} -> m{xmid=x + 0.1*r})
+  ms' <- readIORef ms
+  modifyIORef ms (xmid ^: ((+) ( 0.05 * ms'^.range)))
 keyboardAct ms (SpecialKey KeyUp) Down = do
-  modifyIORef ms (\m@Mandstate{ymid=y,range=r} -> m{ymid=y + 0.1*r})
+  ms' <- readIORef ms
+  modifyIORef ms (ymid ^: ((+) ( 0.05 * ms'^.range)))
 keyboardAct ms (SpecialKey KeyDown) Down = do
-  modifyIORef ms (\m@Mandstate{ymid=y,range=r} -> m{ymid=y - 0.1*r})
+  ms' <- readIORef ms
+  modifyIORef ms (ymid ^: ((+) ( 0.05 * ms'^.range)))
 keyboardAct ms (Char '+') Down = do
-  modifyIORef ms (\m@Mandstate{range=r} -> m{range=r/rangemul})
+  modifyIORef ms (range ^: (/rangemul))
 keyboardAct ms (Char '-') Down = do
-  modifyIORef ms (\m@Mandstate{range=r} -> m{range=r*rangemul})
+  modifyIORef ms (range ^: (*rangemul))
 keyboardAct ms (Char 'a') Down = do
-  modifyIORef ms (\m@Mandstate{colourmul=cm} -> m{colourmul=cm*cmul})
+  modifyIORef ms (colourmul ^: (*cmul)) 
 keyboardAct ms (Char 's') Down = do
-  modifyIORef ms (\m@Mandstate{colourmul=cm} -> m{colourmul=cm/cmul})
+  modifyIORef ms (colourmul ^: (/cmul)) 
+keyboardAct ms (Char '<') Down = do
+  modifyIORef ms (maxIter ^: ((-) iteradd))
+keyboardAct ms (Char '>') Down = do
+  modifyIORef ms (maxIter ^: (+ iteradd))
 keyboardAct ms (Char 'p') Down = do
   ms' <- readIORef ms
   imagAt "frac.png" ms'

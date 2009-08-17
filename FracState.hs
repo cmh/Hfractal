@@ -1,27 +1,34 @@
+{-# LANGUAGE TemplateHaskell #-}
 module FracState
   where
 
-maxIter, maxWidth, maxHeight :: Int
-maxIter = 500
-(maxWidth, maxHeight) = (1200,1200)
+import Data.Accessor
+import Data.Accessor.Basic (T)
+import Data.Accessor.Template
 
---Keep the indicies as a global list so they aren't recopmuted every rendering
-indicies :: [Int]
-indicies = [0 .. (maxWidth-1)*(maxHeight-1)]
-
+iteradd :: Int
 rangemul, cmul :: Double
 rangemul = 1.02
 cmul     = 1.3
+iteradd  = 100
 
 data Mandstate = Mandstate {
-  xmid :: Double,
-  ymid :: Double,
-  range :: Double,
-  colourmul :: Double } deriving (Eq, Show)
+  xmid_ :: Double,
+  ymid_ :: Double,
+  range_ :: Double,
+  colourmul_ :: Double,
+  maxIter_ :: Int} deriving (Eq, Show) 
+$( deriveAccessors ''Mandstate )
 
-data Sz = Sz Int Int deriving (Eq, Show)
+data Sz = Sz {
+  wi_ :: Int,
+  hi_ :: Int} deriving (Eq, Show)
+$( deriveAccessors ''Sz )
+
+
 
 data Options = Options
-	{ size :: Sz,
-	  ms   :: Mandstate   
+	{ size_:: Sz,
+	  ms_  :: Mandstate   
 	} deriving (Eq, Show)
+$( deriveAccessors ''Options )

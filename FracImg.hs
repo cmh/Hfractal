@@ -10,8 +10,9 @@ import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-w = 1600
-h = 1600
+imgMaxIter = 5000 --High iteration for the output image
+w = 2000		  --High resolution for the output image
+h = 2000
 filepath = "." :: FilePath
 
 convColour :: Color3 GLdouble -> Graphics.GD.Color
@@ -28,10 +29,10 @@ pixelWrite im (Sz w h) cm pixarr = go 0 0 where
 		go (x+1) y
 
 imagAt ::  FilePath -> Mandstate -> IO ()
-imagAt fp Mandstate{xmid=xm, ymid=ym, range=rng, colourmul=cm} = do
+imagAt fp (Mandstate xm ym rng cm mi) = do
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	im <- newImage (w, h)
-	compPoints xm ym rng (Sz w h) pixarr
+	compPoints xm ym rng (max imgMaxIter mi) (Sz w h) pixarr
 	pixelWrite im (Sz w h) cm pixarr 
 	savePngFile fp im
 

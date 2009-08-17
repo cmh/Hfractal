@@ -4,12 +4,13 @@ import Data.IORef
 import Data.Array.IO hiding (range)
 import System.Console.GetOpt
 import System.Environment (getArgs)
+import Data.Accessor
 
 import Bindings
 import FracState
 import FracComp
 
-inializeScreen opts@Options{size=Sz w h} = do
+inializeScreen opts@(Options (Sz w h) _) = do
 	(progname,_) <- getArgsAndInitialize
 	initialDisplayMode $= [DoubleBuffered]
 	lineSmooth  $= Enabled
@@ -21,7 +22,7 @@ inializeScreen opts@Options{size=Sz w h} = do
 	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
 	matrixMode $= Modelview 0
 
-setCallBacks opts@Options{size=s@(Sz w h), ms=state} = do
+setCallBacks opts@(Options s@(Sz w h) state) = do
 	--Create the state and pixel array
 	ms <- newIORef state
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
@@ -38,8 +39,8 @@ setCallBacks opts@Options{size=s@(Sz w h), ms=state} = do
 display ms sz@(Sz w h) pixarr = do
 	clear [ColorBuffer]
 	loadIdentity
-	Mandstate{xmid=x, ymid=y, range=r, colourmul=cm} <- get ms
-	compPoints x y r sz pixarr
+	(Mandstate x y r cm mi) <- get ms
+	compPoints x y r mi sz pixarr
 	preservingMatrix $ do
 		renderPrimitive Points $ displayPix sz cm pixarr
 	swapBuffers
@@ -74,21 +75,20 @@ keyboardMouse ms key state _ _ = do
 --Option Parsing and Main loop
 ----------------------------------------
 
+--Some defualt starting positions
 zeroState, state1 :: Mandstate
-zeroState = Mandstate {xmid = 0.0, ymid = 0.0, range = 2.0, colourmul = 0.05}
-state1    = Mandstate {xmid = 0.001643721971153, ymid = 0.822467633298876, range = 0.05, colourmul = 0.0625}
-state = state1
+zeroState = Mandstate 0.0 0.0 2.0 0.05 500
+state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 500
+state     = state1
 
-defOpts = Options {size=Sz 400 400, ms=state}
+defOpts = Options (Sz 400 400) state
 
 --TODO: Tidy up the option parser with Data.Accessor(.Template)
 options :: [OptDescr (Options -> Options)]
 options = [ 
-	Option ['w'] ["width"] (ReqArg (\x opt -> opt {size = sx (size opt) (r x)} ) "WIDTH") "Set width of rendering window", 
-	Option ['h'] ["height"] (ReqArg (\y opt -> opt {size = sy (size opt) (r y)} ) "HEIGHT") "Set height of rendering window"] where 
+	Option ['w'] ["width"] (ReqArg (\x -> size^:wi^=(r x))  "WIDTH") "Set width of rendering window", 
+	Option ['h'] ["height"] (ReqArg (\y -> size^:hi^=(r y)) "HEIGHT") "Set height of rendering window"] where 
 	--Options ['x'] ["x-mid"] (NoArg (\x opt -> opt { ms {xmid = read x} }))
-	sx (Sz x y) x' = (Sz x' y)
-	sy (Sz x y) y' = (Sz x y')
 	r = read
 
 getOpts :: [String] -> IO Options
