@@ -1,5 +1,5 @@
 name:                hfractal
-version:             0.1.0
+version:             0.1.0.1
 cabal-version:		 >= 1.2
 synopsis:            OpenGL fractal renderer
 category:            Graphics
@@ -11,6 +11,6 @@ extra-source-files:  README
 
 Executable hfractal
     main-is:            Hfractal.hs
-    build-depends:      base >=4 && <= 4.1, array, data-accessor, data-accessor-template, gd, OpenGL, GLUT
+    build-depends:      base >=3 && <5, array, data-accessor, data-accessor-template, gd, OpenGL, GLUT
     other-Modules:      FracComp, FracState, FracImg, Bindings
     ghc-options:        -O2
