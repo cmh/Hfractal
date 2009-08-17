@@ -91,9 +91,10 @@ options :: [OptDescr (Options -> Options)]
 options = [ 
 	Option ['w'] ["width"] (ReqArg (\w -> size^:wi^=(read w))  "Window width") "Set width of rendering window", 
 	Option ['h'] ["height"] (ReqArg (\h -> size^:hi^=(read h)) "Window height") "Set height of rendering window",
-	Option ['x'] ["x-mid"] (ReqArg (\x -> ms^:xmid^=(read x)) "Real(z)") "Set the real part of the initial z",
-	Option ['y'] ["y-mid"] (ReqArg (\y -> ms^:ymid^=(read y)) "Imag(z)") "Set the imaginary part of the inital z",
-	Option ['i'] ["maxiter"] (ReqArg (\i -> ms^:maxiter^=(read i)) "Max iterations") "Maximum iterations until escape"] 
+	Option ['x'] ["x-mid"] (ReqArg (\x -> ms^:xmid^=(read x)) "Real(z)") "Set the real part of the initial z (double)",
+	Option ['y'] ["y-mid"] (ReqArg (\y -> ms^:ymid^=(read y)) "Imag(z)") "Set the imaginary part of the inital z (double)",
+	Option ['i'] ["maxiter"] (ReqArg (\i -> ms^:maxiter^=(read i)) "Max iterations") "Maximum iterations until escape (int)",
+	Option ['z'] ["zoom"] (ReqArg (\z -> ms^:range^=(read z)) "Zoom") "Level of zoom (double)"]
 
 getOpts :: [String] -> IO Options
 getOpts argv = case getOpt Permute options argv of

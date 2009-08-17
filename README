@@ -4,4 +4,8 @@ Controls:
 Arrow keys   -    Movement
 +/-          -    Zoom in/out
 a/s          -    Alter colouring gradient
-p            -    Print a hi-res image of the current location in the working direction
+</>			 -    Decrease/increase number of iterations 
+                  in escape algorithm.
+p            -    Print a hi-res image of the current location
+                  in the working direction
+o			 -    Print current location to console
