@@ -17,7 +17,6 @@ inializeScreen opts@(Options (Sz w h) _) = do
 	blendFunc   $= (SrcAlpha, OneMinusSrcAlpha)
 	createWindow "HFractal"
 	windowSize $= Size (fromIntegral (w-2)) (fromIntegral (h-1))
-	--clearColor $= Color4 0 0 0 0
 	matrixMode $= Projection
 	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
 	matrixMode $= Modelview 0
@@ -39,12 +38,14 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 display ms sz@(Sz w h) pixarr = do
 	clear [ColorBuffer]
 	loadIdentity
-	(Mandstate x y r cm mi) <- get ms
-	compPoints x y r mi sz pixarr
+	(Mandstate x y r cm mi) <- get ms --Get state
+	compPoints x y r mi sz pixarr     --Compute escape iterations for this state
 	preservingMatrix $ do
-		renderPrimitive Points $ displayPix sz cm pixarr
+		renderPrimitive Points $ displayPix sz cm pixarr 
 	swapBuffers
 
+--Takes the array with escape iterations (+ smoothing) and displays using
+--the colour function defined in FracComp
 displayPix :: Sz -> Double -> IOUArray Int Double -> IO ()
 displayPix sz@(Sz width height) cm pixarr = go 0 0 where
 	go !x !y | y == height = return ()
@@ -59,6 +60,8 @@ displayPix sz@(Sz width height) cm pixarr = go 0 0 where
 --Other Callbacks
 -----------------------------------------
 
+--TODO: This is necessary currently
+--want to only postRedisplay if something changes
 idle ::  IO ()
 idle = do
 	postRedisplay Nothing

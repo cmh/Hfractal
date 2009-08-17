@@ -8,6 +8,7 @@ import Data.Array.IO
 import FracState
 
 type Pix = IOUArray Int Double
+
 -- Number of iterations to escape
 mandPoint :: Int -> Double -> Double -> Double -> Double -> Int -> Double
 mandPoint !n !x !y cx cy mi | n > mi		   = 0.0

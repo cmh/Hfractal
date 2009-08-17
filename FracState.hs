@@ -6,6 +6,7 @@ import Data.Accessor
 import Data.Accessor.Basic (T)
 import Data.Accessor.Template
 
+--These values alter the state in various ways
 iteradd :: Int
 rangemul, cmul :: Double
 rangemul = 1.02
@@ -24,8 +25,6 @@ data Sz = Sz {
   wi_ :: Int,
   hi_ :: Int} deriving (Eq, Show)
 $( deriveAccessors ''Sz )
-
-
 
 data Options = Options
 	{ size_:: Sz,

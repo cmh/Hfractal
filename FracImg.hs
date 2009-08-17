@@ -15,11 +15,11 @@ w = 2000		  --High resolution for the output image
 h = 2000
 filepath = "." :: FilePath
 
+--Convert a GL Colour datatype to a GD Colour datatype
 convColour :: Color3 GLdouble -> Graphics.GD.Color
 convColour (Color3 r g b) = rgb (f r) (f g) (f b) where
 	f = (floor . (* 256))
 
---pixel ::  Image -> Double -> (Int, Double) -> IO ()
 pixelWrite im (Sz w h) cm pixarr = go 0 0 where
 	go !x !y | y == h = return ()
 			 | x == w = go 0 (y+1)

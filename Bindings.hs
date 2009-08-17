@@ -9,11 +9,10 @@ import Data.Accessor
 import FracState
 import FracImg
 
---TODO. Clean up by using Data.Accessor
 keyboardAct :: IORef Mandstate -> Key -> KeyState -> IO ()
 keyboardAct ms (SpecialKey KeyLeft) Down = do
   ms' <- readIORef ms
-  modifyIORef ms (xmid ^: ((+) ( -0.05 * ms'^.range)))
+  modifyIORef ms (xmid ^: ((-) ( 0.05 * ms'^.range)))
 keyboardAct ms (SpecialKey KeyRight) Down = do
   ms' <- readIORef ms
   modifyIORef ms (xmid ^: ((+) ( 0.05 * ms'^.range)))
@@ -22,7 +21,7 @@ keyboardAct ms (SpecialKey KeyUp) Down = do
   modifyIORef ms (ymid ^: ((+) ( 0.05 * ms'^.range)))
 keyboardAct ms (SpecialKey KeyDown) Down = do
   ms' <- readIORef ms
-  modifyIORef ms (ymid ^: ((+) ( 0.05 * ms'^.range)))
+  modifyIORef ms (ymid ^: ((-) ( 0.05 * ms'^.range)))
 keyboardAct ms (Char '+') Down = do
   modifyIORef ms (range ^: (/rangemul))
 keyboardAct ms (Char '-') Down = do
@@ -37,7 +36,7 @@ keyboardAct ms (Char '>') Down = do
   modifyIORef ms (maxIter ^: (+ iteradd))
 keyboardAct ms (Char 'p') Down = do
   ms' <- readIORef ms
-  imagAt "frac.png" ms'
+  imagAt "frac.png" ms' --TODO: Allow user-namable output images
 keyboardAct ms (Char 'o') Down = do
   ms' <- readIORef ms
   print ms'
