@@ -3,7 +3,7 @@ import FracState
 import Data.Time.Clock
 import Data.Array.IO
 
-(testWidth, testHeight) = (800, 800)
+(testWidth, testHeight) = (1600, 1600)
 mi = 500
 
 main = do
