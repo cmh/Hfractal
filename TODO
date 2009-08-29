@@ -1,0 +1,4 @@
+Allow more configuration. Specifically in image creation - how to let users chose file name.
+
+Parallel compuation of escapes of points - Strategies currently doesn't suit the problem
+Eventually - Some sort of GUI.
