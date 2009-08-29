@@ -9,3 +9,5 @@ a/s          -    Alter colouring gradient
 p            -    Print a hi-res image of the current location
                   in the working direction
 o			 -    Print current location to console
+
+Can exploit multiple cores - Use hfractal [opts] +RTS -N{cores} to enable this.
