@@ -1,4 +1,13 @@
 Allow more configuration. Specifically in image creation - how to let users chose file name.
-
-Parallel compuation of escapes of points - Strategies currently doesn't suit the problem
+ForkIO the image creation.
+ForkOS the openGL rendering - low priority
+More Fractals :
+	Basic escape fratals - julia, newton, burning ship, ^n etc.
+	Bhuddabrots
+	Fractal Flames
+Supersampling (other aliasing) for images [Probably not for live rendering]
+Better Colouring options.
+Possibly arty filters.
+User specified fractals and colouring etc. Some sort of parser / dsl.
+Mouse Support (left click centre and zoom, right click centre, selection box?).
 Eventually - Some sort of GUI.
