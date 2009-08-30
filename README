@@ -1,5 +1,5 @@
 OpenGL Fractal renderer. Currently only renders the Mandelbrot set, but can (and will) be easily extened to other fractals.
-
+Doesn't play well with xmonad - use on the floating layer.
 Controls:
 	Keyboard
 		Arrow keys   -    Movement
