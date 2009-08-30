@@ -10,7 +10,6 @@ import Control.Concurrent
 import FracState
 import FracImg
 
-
 keyboardMouseAct :: IORef Mandstate -> Sz -> Key -> KeyState -> Position -> IO ()
 --Keyboard actions as described in README
 keyboardMouseAct ms _ (SpecialKey KeyLeft) Down _ = do
@@ -39,7 +38,9 @@ keyboardMouseAct ms _ (Char '>') Down _ = do
   modifyIORef ms (maxiter ^: (+ iteradd))
 keyboardMouseAct ms _ (Char 'p') Down _ = do
   ms' <- readIORef ms
-  imagAt "frac.png" ms' --TODO: Allow user-namable output images, make this concurrent
+  putStrLn "Creatind frac.png"
+  forkIO (imagAt "frac.png" ms' >> putStrLn "Finished Image") >> return ()
+  --TODO: Allow user-namable output images, make this concurrent
 keyboardMouseAct ms _ (Char 'o') Down _ = do
   ms' <- readIORef ms
   print ms'
