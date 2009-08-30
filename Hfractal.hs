@@ -27,7 +27,6 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	--Set the callbacks
 	reshapeCallback $= Just (reshape opts)
-	idleCallback $= Just idle
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
 	displayCallback $= display ms s pixarr
 
@@ -60,12 +59,6 @@ displayPix sz@(Sz width height) cm pixarr = go 0 0 where
 --Other Callbacks
 -----------------------------------------
 
---TODO: This is necessary currently
---want to only postRedisplay if something changes
-idle ::  IO ()
-idle = do
-	postRedisplay Nothing
-
 reshape opts s'@(Size w h) = do
 	viewport $= (Position 0 0, s')
 	--setCallBacks opts{size=Sz (fromIntegral w) (fromIntegral h)} --Reset the callbacks so that the pixarr is recreated
@@ -73,6 +66,7 @@ reshape opts s'@(Size w h) = do
 
 keyboardMouse ms s key state _ pos = do
 	keyboardMouseAct ms s key state pos
+	postRedisplay Nothing
 
 -----------------------------------------
 --Option Parsing and Main loop

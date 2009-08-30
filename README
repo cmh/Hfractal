@@ -12,8 +12,8 @@ Controls:
 		o			 -    Print current location to console
 
 	Mouse
-		Left Mouse   -	  Centre and zoom
-		Right Mouse  -	  Centre
+		Left Mouse   -	  Centre
+		Right Mouse  -	  Centre and zoom
 		Mouse Wheel	 -    Zoom
 
 Can exploit multiple cores - Use hfractal [opts] +RTS -N{cores} to enable this.
