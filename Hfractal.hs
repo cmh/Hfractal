@@ -100,7 +100,7 @@ getOpts :: [String] -> IO Options
 getOpts argv = case getOpt Permute options argv of
 	(o, [], []) -> return $ foldl (flip ($)) defOpts o
 	(_, _, errs) -> ioError (userError (concat errs ++ usageInfo header options))
-	where header = "Usage: hfractal [OPTION...]"
+	where header = "Usage: hfractal [OPTIONS...] [+RTS -N{cores}]"
 
 main :: IO()
 main = do
