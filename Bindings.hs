@@ -38,7 +38,7 @@ keyboardMouseAct ms _ (Char '>') Down _ = do
   modifyIORef ms (maxiter ^: (+ iteradd))
 keyboardMouseAct ms _ (Char 'p') Down _ = do
   ms' <- readIORef ms
-  putStrLn "Creatind frac.png"
+  putStrLn "Creating frac.png"
   forkIO (imagAt "frac.png" ms' >> putStrLn "Finished Image") >> return ()
   --TODO: Allow user-namable output images, make this concurrent
 keyboardMouseAct ms _ (Char 'o') Down _ = do
