@@ -28,7 +28,7 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 	--Set the callbacks
 	reshapeCallback $= Just (reshape opts)
 	idleCallback $= Just idle
-	keyboardMouseCallback $= Just (keyboardMouse ms)
+	keyboardMouseCallback $= Just (keyboardMouse ms s)
 	displayCallback $= display ms s pixarr
 
 ----------------------------------------
@@ -71,8 +71,8 @@ reshape opts s'@(Size w h) = do
 	--setCallBacks opts{size=Sz (fromIntegral w) (fromIntegral h)} --Reset the callbacks so that the pixarr is recreated
 	postRedisplay Nothing
 
-keyboardMouse ms key state _ _ = do
-	keyboardAct ms key state
+keyboardMouse ms s key state _ pos = do
+	keyboardMouseAct ms s key state pos
 
 -----------------------------------------
 --Option Parsing and Main loop

@@ -11,3 +11,4 @@ Possibly arty filters.
 User specified fractals and colouring etc. Some sort of parser / dsl.
 Mouse Support (left click centre and zoom, right click centre, selection box?).
 Eventually - Some sort of GUI.
+DONT allow resizing of window - currently too much of a headache
