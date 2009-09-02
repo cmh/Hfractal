@@ -26,6 +26,7 @@ keyboardMouseAct ms _ (SpecialKey KeyDown) Down _ = do
   modifyIORef ms (ymid ^: ((+) ( -0.05 * ms'^.range)))
 keyboardMouseAct ms _ (Char '+') Down _ = do
   modifyIORef ms (range ^: (/rangemul))
+  modifyIORef ms (colourmul ^: (/1.001)) 
 keyboardMouseAct ms _ (Char '-') Down _ = do
   modifyIORef ms (range ^: (*rangemul))
 keyboardMouseAct ms _ (Char 'a') Down _ = do

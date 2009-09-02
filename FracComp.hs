@@ -50,6 +50,33 @@ forkChild io = do
 	putMVar children (mvar:childs)
 	forkIO (io `finally` putMVar mvar ())
 
+
+mandPointSampled !x !y !xrng !yrng !mi ss = average points where
+	points = [ mandPoint 0 0.0 0.0 (x + dx) (y + dy) mi | 
+			   dx <- ((take ss) . iterate (+xrng)) 0.0, 
+			   dy <- ((take ss) . iterate (+yrng)) 0.0]
+	average xs = sum xs / (fromIntegral . length) xs
+
+
+--This gives an image in a sligtly different position than the unsampled function
+--But the code is easier this way
+compPointsSampled :: Double -> Double -> Double -> Int -> Sz -> Pix -> Int -> IO ()
+compPointsSampled xm ym rng mi sz@(Sz width height) arr ss = do
+	go 0
+	waitForChildren where
+		go !y | y == height = return () 
+			  | otherwise = forkChild (goRow 0 y) >> go (y+1)
+		goRow !x y  | x == width  = return () :: IO ()
+					| otherwise = do	
+			writeArray arr k (mandPointSampled cx cy xrng yrng mi ss)
+			goRow (x+1) y where
+				(xrng, yrng) = (rng / fi (ss * width), rng / fi (ss * height))
+				k = x + y*width
+				fi = fromIntegral
+				cx = rng * (fi x - fi w2) / fi width + xm :: Double
+				cy = rng * (fi y - fi h2) / fi height + ym :: Double
+				(w2, h2) = (width `div` 2, height `div` 2) 
+
 compPoints :: Double -> Double -> Double -> Int -> Sz -> Pix -> IO ()
 compPoints xm ym rng mi sz@(Sz width height) arr = do
 	go 0
@@ -62,8 +89,8 @@ compPoints xm ym rng mi sz@(Sz width height) arr = do
 			goRow (x+1) y where
 				k = x + y*width
 				fi = fromIntegral
-				cx = rng * (fi x - fi w2) / fi w2 + xm :: Double
-				cy = rng * (fi y - fi h2) / fi h2 + ym :: Double
+				cx = rng * (fi x - fi w2) / fi width + xm :: Double
+				cy = rng * (fi y - fi h2) / fi height + ym :: Double
 				(w2, h2) = (width `div` 2, height `div` 2) 
 
 -----------------------------------------

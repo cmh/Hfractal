@@ -17,16 +17,17 @@ inializeScreen opts@(Options (Sz w h) _) = do
 	blendFunc   $= (SrcAlpha, OneMinusSrcAlpha)
 	createWindow "HFractal"
 	windowSize $= Size (fromIntegral (w-2)) (fromIntegral (h-1))
-	matrixMode $= Projection
-	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
-	matrixMode $= Modelview 0
+	reshapeCallback $= Just (reshape opts)
 
 setCallBacks opts@(Options s@(Sz w h) state) = do
 	--Create the state and pixel array
-	ms <- newIORef state
+	ms <- newIORef state 
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
+	--Deal with the window size
+	matrixMode $= Projection
+	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
+	matrixMode $= Modelview 0
 	--Set the callbacks
-	reshapeCallback $= Just (reshape opts)
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
 	displayCallback $= display ms s pixarr
 
@@ -34,6 +35,7 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 --Display Callback and related functions
 ----------------------------------------
 
+display ::  (HasGetter g) => g Mandstate -> Sz -> Pix -> IO ()
 display ms sz@(Sz w h) pixarr = do
 	clear [ColorBuffer]
 	loadIdentity
@@ -59,9 +61,10 @@ displayPix sz@(Sz width height) cm pixarr = go 0 0 where
 --Other Callbacks
 -----------------------------------------
 
+reshape ::  Options -> Size -> IO ()
 reshape opts s'@(Size w h) = do
 	viewport $= (Position 0 0, s')
-	--setCallBacks opts{size=Sz (fromIntegral w) (fromIntegral h)} --Reset the callbacks so that the pixarr is recreated
+	--setCallBacks opts{size_=Sz (fromIntegral w) (fromIntegral h)} --Reset the callbacks so that the pixarr is recreated
 	postRedisplay Nothing
 
 keyboardMouse ms s key state _ pos = do
@@ -72,15 +75,16 @@ keyboardMouse ms s key state _ pos = do
 --Option Parsing and Main loop
 ----------------------------------------
 
---Some defualt starting positions
-zeroState, state1 :: Mandstate
+--Some interesting starting positions
+zeroState, state0, state1, state2 :: Mandstate
 zeroState = Mandstate 0.0 0.0 2.0 0.05 500
+state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 500
 state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 500
+state2    = Mandstate 0.3547193109712576 0.09540175611014662705 0.0002 0.00625 1000
 state     = state1
 
 defOpts = Options (Sz 400 400) state
 
---TODO: Tidy up the option parser with Data.Accessor(.Template)
 options :: [OptDescr (Options -> Options)]
 options = [ 
 	Option ['w'] ["width"] (ReqArg (\w -> size^:wi^=(read w))  "Window width") "Set width of rendering window", 

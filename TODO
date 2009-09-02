@@ -3,6 +3,7 @@ Description for hackage. (Also haddock docs?)
 
 
 --Important
+Colouring - Using a colour space / pallette rather than trig functions (more efficient and look better)
 Allow more configuration. Specifically in image creation - how to let users chose file name.
 More Fractals :
 	Basic escape fratals - julia, newton, burning ship, ^n etc.

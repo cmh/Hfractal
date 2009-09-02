@@ -10,9 +10,10 @@ import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-imgMaxIter = 5000 --High iteration for the output image
-w = 2000		  --High resolution for the output image
-h = 2000
+subSamp = 8
+imgMaxIter = 35000 --High iteration for the output image
+w = 1700		  --High resolution for the output image
+h = 1200
 filepath = "." :: FilePath
 
 --Convert a GL Colour datatype to a GD Colour datatype
@@ -25,14 +26,14 @@ pixelWrite im (Sz w h) cm pixarr = go 0 0 where
 			 | x == w = go 0 (y+1)
 			 | otherwise = do
 		p <- readArray pixarr (x + y*w)
-		setPixel (x,y) (convColour $ colourMand p cm) im
+		(antiAliased $ setPixel (x,y)) (convColour $ colourMand p cm) im
 		go (x+1) y
 
 imagAt ::  FilePath -> Mandstate -> IO ()
 imagAt fp (Mandstate xm ym rng cm mi) = do
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	im <- newImage (w, h)
-	compPoints xm ym rng (max imgMaxIter mi) (Sz w h) pixarr
+	compPointsSampled xm ym rng (max imgMaxIter mi) (Sz w h) pixarr subSamp
 	pixelWrite im (Sz w h) cm pixarr 
 	savePngFile fp im
 
