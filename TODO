@@ -1,7 +1,6 @@
 --Urgent
 Description for hackage. (Also haddock docs?)
 
-
 --Important
 Colouring - Using a colour space / pallette rather than trig functions (more efficient and look better)
 Allow more configuration. Specifically in image creation - how to let users chose file name.
@@ -13,7 +12,6 @@ More Fractals :
 --Would be nice
 
 ForkOS the openGL rendering - low priority
-Supersampling (other aliasing) for images [Probably not for live rendering]
 Better Colouring options.
 Possibly arty filters.
 User specified fractals and colouring etc. Some sort of parser / dsl.

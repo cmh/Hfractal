@@ -51,7 +51,7 @@ forkChild io = do
 	forkIO (io `finally` putMVar mvar ())
 
 
-mandPointSampled !x !y !xrng !yrng !mi ss = average points where
+mandPointSampled !x !y !xrng !yrng !mi ss = if (any (== 0.0) points) then 0.0 else average points where
 	points = [ mandPoint 0 0.0 0.0 (x + dx) (y + dy) mi | 
 			   dx <- ((take ss) . iterate (+xrng)) 0.0, 
 			   dy <- ((take ss) . iterate (+yrng)) 0.0]

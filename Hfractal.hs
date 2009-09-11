@@ -78,12 +78,12 @@ keyboardMouse ms s key state _ pos = do
 --Some interesting starting positions
 zeroState, state0, state1, state2 :: Mandstate
 zeroState = Mandstate 0.0 0.0 2.0 0.05 500
-state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 500
+state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 5000
 state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 500
-state2    = Mandstate 0.3547193109712576 0.09540175611014662705 0.0002 0.00625 1000
-state     = state1
+state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 5000
+state     = state2
 
-defOpts = Options (Sz 400 400) state
+defOpts = Options (Sz 500 500) state
 
 options :: [OptDescr (Options -> Options)]
 options = [ 
