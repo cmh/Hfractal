@@ -13,7 +13,7 @@ version = Version {versionBranch = [0,3,2,1], versionTags = []}
 bindir, libdir, datadir, libexecdir :: FilePath
 
 bindir     = "/home/chris/.cabal/bin"
-libdir     = "/home/chris/.cabal/lib/hfractal-0.3.2.1/ghc-6.10.4"
+libdir     = "/home/chris/.cabal/lib/hfractal-0.3.2.1/ghc-6.12.1"
 datadir    = "/home/chris/.cabal/share/hfractal-0.3.2.1"
 libexecdir = "/home/chris/.cabal/libexec"
 

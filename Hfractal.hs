@@ -81,7 +81,7 @@ zeroState = Mandstate 0.0 0.0 2.0 0.05 500
 state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 5000
 state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 500
 state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 5000
-state     = state2
+state     = state1
 
 defOpts = Options (Sz 500 500) state
 
