@@ -4,13 +4,14 @@ module FracImg
 
 import FracComp
 import FracState
+import FracColour
 
 import Graphics.GD
 import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-supSamp = 4       --Use subpixel sampling
+supSamp = 5       --Use subpixel sampling
 imgMaxIter = 5000 --High iteration for the output image
 w = 2000		  --High resolution for the output image
 h = 2000
@@ -26,7 +27,7 @@ pixelWrite im (Sz w h) cm pixarr = go 0 0 where
 			 | x == w = go 0 (y+1)
 			 | otherwise = do
 		p <- readArray pixarr (x + y*w)
-		(antiAliased $ setPixel (x,y)) (convColour $ colourMand p cm) im
+		(antiAliased $ setPixel (x,y)) (convColour $ colourPoint p cm) im
 		go (x+1) y
 
 imagAt ::  FilePath -> Mandstate -> IO ()

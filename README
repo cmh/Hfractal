@@ -1,19 +1,22 @@
-OpenGL Fractal renderer. Currently only renders the Mandelbrot set, but can (and will) be easily extened to other fractals.
+OpenGL Fractal renderer. Currently only renders the Mandelbrot set, but can extened to other fractals.
 Doesn't play well with xmonad - use on the floating layer.
-Controls:
-	Keyboard
-		Arrow keys   -    Movement
-		+/-          -    Zoom in/out
-		a/s          -    Alter colouring gradient
-		</>			 -    Decrease/increase number of iterations 
-						  in escape algorithm.
-		p            -    Print a hi-res image of the current location
-					      in the working direction
-		o			 -    Print current location to console
 
-	Mouse
-		Left Mouse   -	  Centre
-		Right Mouse  -	  Centre and zoom
-		Mouse Wheel	 -    Zoom
+Controls:
+    Keyboard
+        Arrow keys   -    Movement
+        +/-          -    Zoom in/out
+        a/s          -    Alter colouring gradient
+        </>          -    Decrease/increase number of iterations 
+                          in escape algorithm.
+        p            -    Print a hi-res image of the current location
+                          in the working direction
+        o            -    Print current location to console
+
+    Mouse
+        Left Mouse   -    Centre
+        Right Mouse  -    Centre and zoom
+        Mouse Wheel  -    Zoom
 
 Can exploit multiple cores - Use hfractal [opts] +RTS -N{cores} to enable this.
+
+On linux the following libraries may be required: [libjpeg8, libpng, libgd2-xpm-dev]

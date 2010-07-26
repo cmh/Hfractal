@@ -5,6 +5,7 @@ import Graphics.UI.GLUT
 import Data.IORef
 import System.Exit
 import Data.Accessor
+import Data.Accessor.Basic (T)
 import Control.Concurrent
 
 import FracState
@@ -26,7 +27,6 @@ keyboardMouseAct ms _ (SpecialKey KeyDown) Down _ = do
   modifyIORef ms (ymid ^: ((+) ( -0.05 * ms'^.range)))
 keyboardMouseAct ms _ (Char '+') Down _ = do
   modifyIORef ms (range ^: (/rangemul))
-  modifyIORef ms (colourmul ^: (/1.001)) 
 keyboardMouseAct ms _ (Char '-') Down _ = do
   modifyIORef ms (range ^: (*rangemul))
 keyboardMouseAct ms _ (Char 'a') Down _ = do
@@ -64,6 +64,5 @@ keyboardMouseAct _ _ (Char '\27') _ _ = exitWith ExitSuccess
 keyboardMouseAct _ _ _ _ _ = return ()
 
 --TODO, have a separate mouse and keyboard functions and then a wrapper with cases on the type of Key
-
 mp :: GLint -> Int -> Double
 mp x w = (fromIntegral x - fromIntegral (w `div` 2)) / fromIntegral w
