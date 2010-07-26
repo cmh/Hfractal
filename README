@@ -18,3 +18,5 @@ Controls:
         Mouse Wheel  -    Zoom
 
 Can exploit multiple cores - Use hfractal [opts] +RTS -N{cores} to enable this.
+
+On linux the following libraries may be required: [libjpeg8, libpng, libgd2-xpm-dev]
