@@ -43,6 +43,14 @@ colourPointFun m cm = fmap realToFrac $ Color3 r g b where
 	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
+{-
+-- Range based colouring, need access to the maxiter here (after refactor)
+colourPointFun2 :: Double -> Double -> Color3 GLdouble
+colourPointFun2 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
+colourPointFun2 m cm = fmap realToFrac $ Color3 r g b where
+	frac = fromIntegral m / fromIntegral maxIter
+-}
+
 -- The function used to render. can be selected at runtime by the parameter cf
 colourPoint cf | cf `mod` 2 == 1 = colourPointFun
                | cf `mod` 2 == 0 = colourPointPal

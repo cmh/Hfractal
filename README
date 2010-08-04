@@ -6,6 +6,7 @@ Controls:
         Arrow keys   -    Movement
         +/-          -    Zoom in/out
         a/s          -    Alter colouring gradient
+		f            -    Toggle colouring method
         </>          -    Decrease/increase number of iterations 
                           in escape algorithm.
         p            -    Print a hi-res image of the current location
