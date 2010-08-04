@@ -17,3 +17,4 @@ Executable hfractal
     build-depends:      base >=3 && <5, array, gd < 3000.3.0 && >= 3000.2.0, data-accessor >=0.2 && <=0.3, data-accessor-template >=0.2 && <=0.3, OpenGL >= 2.3 && < 2.4.0.0, OpenGLRaw < 1.1.0.0, GLUT >= 2.2.1.0 && < 2.2.2.0, colour >=2.3.1, containers >= 0.2
     other-Modules:      FracComp, FracColour, FracImg, FracState, Bindings
     ghc-options:        -O2 -threaded -fvia-C -optc-O3 -optc-ffast-math
+    Hs-Source-Dirs:     src
