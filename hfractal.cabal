@@ -8,6 +8,7 @@ category:            Graphics
 license:             BSD3
 copyright:           2009-2009 Chris Holdsworth
 author:              Chris Holdsworth <chrisholdsworth@gmail.com>
+maintainer:          Chris Holdsworth <chrisholdsworth@gmail.com>
 homepage:            http://github.com/cmh/Hfractal
 build-type:          Simple
 extra-source-files:  README
