@@ -22,20 +22,20 @@ convColour :: Color3 GLdouble -> Graphics.GD.Color
 convColour (Color3 r g b) = rgb (f r) (f g) (f b) where
 	f = (floor . (* 256))
 
-pixelWrite im (Sz w h) cm pixarr = go 0 0 where
+pixelWrite im (Sz w h) cf cm pixarr = go 0 0 where
 	go !x !y | y == h = return ()
 			 | x == w = go 0 (y+1)
 			 | otherwise = do
 		p <- readArray pixarr (x + y*w)
-		(antiAliased $ setPixel (x,y)) (convColour $ colourPoint p cm) im
+		(antiAliased $ setPixel (x,y)) (convColour $ colourPoint cf p cm) im
 		go (x+1) y
 
 imagAt ::  FilePath -> Mandstate -> IO ()
-imagAt fp (Mandstate xm ym rng cm mi) = do
+imagAt fp (Mandstate xm ym rng cm cf mi) = do
 	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
 	im <- newImage (w, h)
 	compPointsSampled xm ym rng (max imgMaxIter mi) (Sz w h) pixarr supSamp
-	pixelWrite im (Sz w h) cm pixarr 
+	pixelWrite im (Sz w h) cf cm pixarr 
 	savePngFile fp im
 
 {-

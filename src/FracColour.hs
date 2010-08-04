@@ -27,25 +27,28 @@ colourPoint' colpal n = {-# SCC "blend" #-} C.blend (n-fromIntegral n1) (fromJus
 	n2 = n1 + 1
 	(c1, c2) = {-# SCC "lookups" #-} (IM.lookup n1 colpal, IM.lookup n2 colpal)
 
-pallete = createPallete 5002 [(0,red), (1200, white), (1600, yellow), (2000, blend 0.3 white orange), (2500,darken 0.2 orange), (3200, blend 0.7 orange black), (4400, white), (5002, red)]
+pallete = createPallete 5002 [(0,red), (200, white), (1600, yellow), (2000, blend 0.3 white orange),
+                              (2500, darken 0.2 orange), (3200, blend 0.7 orange black), (4400, white), (5002, red)]
 
-{-
-colourPoint :: Double -> Double -> Color3 GLdouble
-colourPoint 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPoint n _ = let c = toSRGB $ colourPoint' pallete n in
+colourPointPal :: Double -> Double -> Color3 GLdouble
+colourPointPal 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
+colourPointPal n _ = let c = toSRGB $ colourPoint' pallete n in
 	{-# SCC "conversions" #-} fmap realToFrac $ Color3 (channelRed c) (channelGreen c) (channelBlue c)
--}
-
-colourGD :: Double -> Double -> Graphics.GD.Color
-colourGD 0.0 _ = rgb 0 0 0
-colourGD n _ = let c = toSRGB24 $ colourPoint' pallete n in
-	rgb (fromIntegral $ channelRed c) (fromIntegral $ channelGreen c) (fromIntegral $ channelBlue c)
 
 -- Colour a vertex based on the number of iterations it took to escape
-colourPoint :: Double -> Double -> Color3 GLdouble
-colourPoint 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPoint m cm = fmap realToFrac $ Color3 r g b where
+colourPointFun :: Double -> Double -> Color3 GLdouble
+colourPointFun 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
+colourPointFun m cm = fmap realToFrac $ Color3 r g b where
 	r = 0.5 + 0.5 * cos (m * cm) 
 	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
+-- The function used to render. can be selected at runtime by the parameter cf
+colourPoint cf | cf `mod` 2 == 1 = colourPointFun
+               | cf `mod` 2 == 0 = colourPointPal
+
+-- Colour a point outputting a GD compatiable value for png files
+colourGD :: Double -> Double -> Graphics.GD.Color
+colourGD 0.0 _ = rgb 0 0 0
+colourGD n _ = let c = toSRGB24 $ colourPoint' pallete n in
+	rgb (fromIntegral $ channelRed c) (fromIntegral $ channelGreen c) (fromIntegral $ channelBlue c)

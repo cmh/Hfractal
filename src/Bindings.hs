@@ -11,8 +11,8 @@ import Control.Concurrent
 import FracState
 import FracImg
 
-keyboardMouseAct :: IORef Mandstate -> Sz -> Key -> KeyState -> Position -> IO ()
 --Keyboard actions as described in README
+keyboardMouseAct :: IORef Mandstate -> Sz -> Key -> KeyState -> Position -> IO ()
 keyboardMouseAct ms _ (SpecialKey KeyLeft) Down _ = do
   ms' <- readIORef ms
   modifyIORef ms (xmid ^: ((+) ( -0.05 * ms'^.range)))
@@ -37,11 +37,15 @@ keyboardMouseAct ms _ (Char '<') Down _ = do
   modifyIORef ms (maxiter ^: ((-) iteradd))
 keyboardMouseAct ms _ (Char '>') Down _ = do
   modifyIORef ms (maxiter ^: (+ iteradd))
+--colourfun is an INT which when read modularly chooses the 
+--colour rendering function
+keyboardMouseAct ms _ (Char 'f') Down _ = do
+  modifyIORef ms (colourfun ^: (+ 1))
 keyboardMouseAct ms _ (Char 'p') Down _ = do
   ms' <- readIORef ms
   putStrLn "Creating frac.png"
   forkIO (imagAt "frac.png" ms' >> putStrLn "Finished Image") >> return ()
-  --TODO: Allow user-namable output images, make this concurrent
+--TODO: Allow user-namable output images, make this concurrent
 keyboardMouseAct ms _ (Char 'o') Down _ = do
   ms' <- readIORef ms
   print ms'

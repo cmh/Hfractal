@@ -9,6 +9,7 @@ import Data.Accessor
 import Bindings
 import FracState
 import FracComp
+import FracColour
 
 inializeScreen opts@(Options (Sz w h) _) = do
 	(progname,_) <- getArgsAndInitialize
@@ -35,25 +36,25 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 --Display Callback and related functions
 ----------------------------------------
 
-display ::  (HasGetter g) => g Mandstate -> Sz -> Pix -> IO ()
+display :: (HasGetter g) => g Mandstate -> Sz -> Pix -> IO ()
 display ms sz@(Sz w h) pixarr = do
 	clear [ColorBuffer]
 	loadIdentity
-	(Mandstate x y r cm mi) <- get ms --Get state
-	compPoints x y r mi sz pixarr     --Compute escape iterations for this state
+	(Mandstate x y r cm cf mi) <- get ms --Get state
+	compPoints x y r mi sz pixarr --Compute escape iterations for this state
 	preservingMatrix $ do
-		renderPrimitive Points $ displayPix sz cm pixarr 
+		renderPrimitive Points $ displayPix sz cf cm pixarr 
 	swapBuffers
 
 --Takes the array with escape iterations (+ smoothing) and displays using
 --the colour function defined in FracComp
-displayPix :: Sz -> Double -> IOUArray Int Double -> IO ()
-displayPix sz@(Sz width height) cm pixarr = go 0 0 where
+displayPix :: Sz -> Int -> Double -> IOUArray Int Double -> IO ()
+displayPix sz@(Sz width height) cf cm pixarr = go 0 0 where
 	go !x !y | y == height = return ()
 	         | x == width  = go 0 (y+1)	
 			 | otherwise   = do
 		dk <- readArray pixarr (x + y*width)
-		color (colourMand dk cm)
+		color (colourPoint cf dk cm)
 		vertex $ Vertex2 (fromIntegral x) (fromIntegral y :: GLfloat)
 		go (x+1) y
 
@@ -77,10 +78,10 @@ keyboardMouse ms s key state _ pos = do
 
 --Some interesting starting positions
 zeroState, state0, state1, state2 :: Mandstate
-zeroState = Mandstate 0.0 0.0 2.0 0.05 500
-state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 5000
-state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 500
-state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 5000
+zeroState = Mandstate 0.0 0.0 2.0 0.05 1 500
+state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 2 5000
+state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 2 500
+state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 2 5000
 state     = state1
 
 defOpts = Options (Sz 500 500) state

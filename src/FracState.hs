@@ -18,6 +18,7 @@ data Mandstate = Mandstate {
   ymid_ :: Double,
   range_ :: Double,
   colourmul_ :: Double,
+  colourfun_ :: Int,
   maxiter_ :: Int} deriving (Eq, Show) 
 $( deriveAccessors ''Mandstate )
 

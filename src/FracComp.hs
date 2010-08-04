@@ -20,14 +20,6 @@ mandPoint !n !x !y cx cy mi | n > mi		   = 0.0
 	!x2 = x*x  --This CSE saves a few cycles
 	!y2 = y*y
 
--- Colour a vertex
-colourMand :: Double -> Double -> Color3 GLdouble
-colourMand 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourMand m cm = fmap realToFrac $ Color3 r g b where
-	r = 0.5 + 0.5 * cos (m * cm) 
-	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
-	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
-
 children :: MVar [MVar ()]
 children = unsafePerformIO (newMVar [])
 
@@ -96,7 +88,6 @@ compPoints xm ym rng mi sz@(Sz width height) arr = do
 -----------------------------------------
 --QuickCheck Properties
 -----------------------------------------
---TODO: Conjure up some more properties
 
 prop_reflection :: Double -> Double -> Bool
 prop_reflection x y = mandPoint 0 0.0 0.0 x y 500 == mandPoint 0 0.0 0.0 x (-y) 500
