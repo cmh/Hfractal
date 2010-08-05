@@ -23,27 +23,27 @@ inializeScreen opts@(Options (Sz w h) _) = do
 setCallBacks opts@(Options s@(Sz w h) state) = do
 	--Create the state and pixel array
 	ms <- newIORef state 
-	pixarr <- newArray (0, w*h-1) 0.0 :: IO Pix
+	pix <- initPixArray w h
 	--Deal with the window size
 	matrixMode $= Projection
 	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
 	matrixMode $= Modelview 0
 	--Set the callbacks
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
-	displayCallback $= display ms s pixarr
+	displayCallback $= display ms s pix
 
 ----------------------------------------
 --Display Callback and related functions
 ----------------------------------------
 
-display :: (HasGetter g) => g Mandstate -> Sz -> Pix -> IO ()
-display ms sz@(Sz w h) pixarr = do
+display :: (HasGetter g) => g Mandstate -> Sz -> PixArray -> IO ()
+display ms sz@(Sz w h) pix@(PixArray pixarr _ _ _ _ _ _ ) = do
 	clear [ColorBuffer]
 	loadIdentity
 	(Mandstate x y r cm cf mi) <- get ms --Get state
-	compPoints x y r mi sz pixarr --Compute escape iterations for this state
+	movePoints x y r mi pix --Compute escape iterations for this state
 	preservingMatrix $ do
-		renderPrimitive Points $ displayPix sz cf cm pixarr 
+		renderPrimitive Points $ displayPix sz cf cm pixarr
 	swapBuffers
 
 --Takes the array with escape iterations (+ smoothing) and displays using

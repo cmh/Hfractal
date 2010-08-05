@@ -11,6 +11,45 @@ import System.IO.Unsafe
 import FracState
 
 type Pix = IOUArray Int Double
+type RowVals = IOUArray Int Double
+type ColVals = IOUArray Int Double
+
+--Could keep maximum escape value in here for colouring purposes
+data PixArray = PixArray {
+	pixels :: Pix,
+	rows :: RowVals,
+	cols :: ColVals,
+	pixelsTemp :: Pix,
+	rowsTemp :: RowVals,
+	colsTemp :: ColVals,
+	siz :: Sz}
+
+initPixArray :: Int -> Int -> IO PixArray 
+initPixArray width height = do
+	pixels <- newArray (0, width * height - 1) 0.0 :: IO Pix
+	rows <- newArray (0, width) 0.0 :: IO RowVals
+	cols <- newArray (0, height) 0.0 :: IO ColVals
+	pixelsTemp <- newArray (0, width * height - 1) 0.0 :: IO Pix
+	rowsTemp <- newArray (0, width) 0.0 :: IO RowVals
+	colsTemp <- newArray (0, height) 0.0 :: IO ColVals
+	return (PixArray pixels rows cols pixelsTemp rowsTemp colsTemp (Sz width height))
+
+copyArr :: Int -> IOUArray Int Double -> IOUArray Int Double -> IO ()
+copyArr end orig dest = go 0 where
+	go !x | x == end = return ()
+	      | otherwise = do
+		t <- readArray orig x
+		writeArray dest x t
+		go (x + 1)
+
+copyPix :: Sz -> Pix -> Pix -> IO () 
+copyPix sz@(Sz width height) = copyArr (width * height)
+
+copyRow :: Sz -> RowVals -> RowVals -> IO ()
+copyRow sz@(Sz width height) = copyArr width
+
+copyCol :: Sz -> RowVals -> RowVals -> IO ()
+copyCol sz@(Sz width height) = copyArr height
 
 -- Number of iterations to escape
 mandPoint :: Int -> Double -> Double -> Double -> Double -> Int -> Double
@@ -69,8 +108,9 @@ compPointsSampled xm ym rng mi sz@(Sz width height) arr ss = do
 				cy = rng * (fi y - fi h2) / fi height + ym :: Double
 				(w2, h2) = (width `div` 2, height `div` 2) 
 
-compPoints :: Double -> Double -> Double -> Int -> Sz -> Pix -> IO ()
-compPoints xm ym rng mi sz@(Sz width height) arr = do
+--Fill a Pix array with an initial computation centered at xm ym at zoom range
+compPoints :: Double -> Double -> Double -> Int -> PixArray -> IO ()
+compPoints xm ym rng mi pa@(PixArray arr rows cols _ _ _ sz@(Sz width height)) = do
 	go 0
 	waitForChildren where
 		go !y | y == height = return () 
@@ -78,12 +118,85 @@ compPoints xm ym rng mi sz@(Sz width height) arr = do
 		goRow !x y  | x == width  = return () :: IO ()
 					| otherwise = do	
 			writeArray arr k (mandPoint 0 0.0 0.0 cx cy mi)
+			writeArray rows x cx  --This is horribly inefficient, but quick fix
+			writeArray cols y cy
 			goRow (x+1) y where
 				k = x + y*width
 				fi = fromIntegral
 				cx = rng * (fi x - fi w2) / fi width + xm :: Double
 				cy = rng * (fi y - fi h2) / fi height + ym :: Double
 				(w2, h2) = (width `div` 2, height `div` 2) 
+
+mp :: Double -> Double -> Double -> Int -> PixArray -> IO ()
+mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)) = do
+	go 0 0 where
+		(w2, h2) = (width `div` 2, height `div` 2) 
+		fi = fromIntegral
+		step = rng / fi (height * 2) :: Double
+		go !rowIndex !y = do
+			if (y == height) 
+				then do return () :: IO ()
+				else do rc <- (readArray rows rowIndex)
+					let cy = rng * (fi y - fi h2) / fi height + ym :: Double
+					if (rowIndex == height) 
+						then do writeArray rowst y cy
+							goRow 0 y
+							go rowIndex (y+1)
+						else if (rc < (cy - step)) 
+							then do go (rowIndex + 1) y 
+							else if (rc > (cy - step) && rc < (cy + step)) 
+								then do writeArray rowst y rc
+									goRowCache rowIndex rc cy 0 0 y 
+									go rowIndex (y+1)
+								else do writeArray rowst y cy
+									goRow 0 y
+									go rowIndex (y+1)
+		goRowCache ri rc cy !colIndex !x y = do
+			if (x == width) 
+				then do return () :: IO ()
+				else do cc <- (readArray cols colIndex)
+					let cx = rng * (fi x - fi w2) / fi width + xm :: Double
+					let k = x + y*width	
+					if (colIndex == width) 
+						then do writeArray colst x cx
+							writeArray pixt k (mandPoint 0 0.0 0.0 cx cy mi)
+							goRowCache ri rc cy colIndex (x+1) y 
+						else if (cc < (cx - step)) 
+							then do goRowCache ri rc cy (colIndex + 1) x y 
+							else do
+								if (cc > (cx - step) && cc < (cx + step)) 
+									then do writeArray colst x cc    --This is a bit of a fuck up
+										oldVal <- readArray pix (colIndex + ri * width)
+										--putStrLn "found a suitable val: "
+										--putStrLn (show oldVal)
+										--putStrLn (show (mandPoint 0 0.0 0.0 cx cy mi))
+										writeArray pixt k oldVal
+										goRowCache ri rc cy colIndex (x+1) y 
+									else do writeArray colst x cx
+										writeArray pixt k (mandPoint 0 0.0 0.0 cx cy mi)
+										goRowCache ri rc cy colIndex (x+1) y 
+		goRow !x y  | x == width = return () :: IO ()
+					| otherwise = do	
+			writeArray pixt k (mandPoint 0 0.0 0.0 cx cy mi)
+			writeArray colst y cx
+			goRow (x+1) y where
+				k = x + y*width
+				cx = rng * (fi x - fi w2) / fi width + xm :: Double
+				cy = rng * (fi y - fi h2) / fi height + ym :: Double
+
+movePoints :: Double -> Double -> Double -> Int -> PixArray -> IO ()
+movePoints xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)) = do
+	mp xm ym rng mi pa
+	copyPix sz pixt pix   --Flip the arrays
+	copyRow sz rowst rows
+	copyCol sz colst cols
+
+
+{-
+movePoints xm ym rng mi pa@(PixArray pix rows cols pixt rowst cols (Sz width height)) = do
+
+-}
+
 
 -----------------------------------------
 --QuickCheck Properties

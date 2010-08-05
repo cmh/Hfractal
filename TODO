@@ -2,3 +2,5 @@ Arbitray precision floats
 ForkOS the openGL rendering
 GUI
 Fix window resizing
+button to reset position
+button to cycle through fractal types
