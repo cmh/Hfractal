@@ -9,7 +9,7 @@ import Data.Accessor.Template
 --These values alter the state in various ways
 iteradd :: Int
 rangemul, cmul :: Double
-rangemul = 1.019
+rangemul = 1.009
 cmul     = 1.2
 iteradd  = 100
 

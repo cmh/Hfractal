@@ -129,7 +129,8 @@ compPoints xm ym rng mi pa@(PixArray arr rows cols _ _ _ sz@(Sz width height)) =
 
 mp :: Double -> Double -> Double -> Int -> PixArray -> IO ()
 mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)) = do
-	go 0 0 where
+	go 0 0 
+	waitForChildren where
 		(w2, h2) = (width `div` 2, height `div` 2) 
 		fi = fromIntegral
 		step = rng / fi (height * 2) :: Double
@@ -146,11 +147,9 @@ mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)
 							then do go (rowIndex + 1) y 
 							else if (rc > (cy - step) && rc < (cy + step)) 
 								then do writeArray rowst y rc
-									goRowCache rowIndex rc cy 0 0 y 
-									go rowIndex (y+1)
+									forkChild (goRowCache rowIndex rc cy 0 0 y) >> go rowIndex (y+1)
 								else do writeArray rowst y cy
-									goRow 0 y
-									go rowIndex (y+1)
+									forkChild (goRow 0 y) >> go rowIndex (y+1)
 		goRowCache ri rc cy !colIndex !x y = do
 			if (x == width) 
 				then do return () :: IO ()
