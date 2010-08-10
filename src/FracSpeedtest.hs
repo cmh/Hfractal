@@ -1,3 +1,5 @@
+module FracSpeedTest where
+
 import FracComp
 import FracState
 import Data.Time.Clock
