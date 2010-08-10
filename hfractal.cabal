@@ -1,12 +1,12 @@
 name:                hfractal
-version:             0.3.4
+version:             0.4
 cabal-version:       >= 1.2
 synopsis:            OpenGL fractal renderer
 description:         An OpenGL fractal browser with multicore support and the capability to output high quality png images.
 stability:           Experimental
 category:            Graphics
 license:             BSD3
-copyright:           2009-2009 Chris Holdsworth
+copyright:           2009-2010 Chris Holdsworth
 author:              Chris Holdsworth <chrisholdsworth@gmail.com>
 maintainer:          Chris Holdsworth <chrisholdsworth@gmail.com>
 homepage:            http://github.com/cmh/Hfractal

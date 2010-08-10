@@ -30,9 +30,7 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 	matrixMode $= Modelview 0
 	--Set the callbacks
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
-	displayCallback $= display ms s pix
-
-----------------------------------------
+	displayCallback $= display ms s pix ----------------------------------------
 --Display Callback and related functions
 ----------------------------------------
 
@@ -54,7 +52,7 @@ displayPix sz@(Sz width height) cf cm pixarr = go 0 0 where
 	         | x == width  = go 0 (y+1)	
 			 | otherwise   = do
 		dk <- readArray pixarr (x + y*width)
-		color (colourPoint cf dk cm)
+		color (colourPointFun dk cm)
 		vertex $ Vertex2 (fromIntegral x) (fromIntegral y :: GLfloat)
 		go (x+1) y
 
@@ -80,8 +78,8 @@ keyboardMouse ms s key state _ pos = do
 zeroState, state0, state1, state2 :: Mandstate
 zeroState = Mandstate 0.0 0.0 2.0 0.05 1 500
 state0	  = Mandstate (-0.14076572210832694) 0.8510989379408804 1.0 0.05 2 5000
-state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 2 500
-state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 2 5000
+state1    = Mandstate 0.001643721971153 0.822467633298876 0.05 0.0625 1 400
+state2    = Mandstate 0.35473015182773904 9.541013313560959e-2 0.0002 0.0625 1 600
 state     = state1
 
 defOpts = Options (Sz 500 500) state

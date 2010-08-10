@@ -38,10 +38,10 @@ colourPointPal n _ = let c = toSRGB $ colourPoint' pallete n in
 -- Colour a vertex based on the number of iterations it took to escape
 colourPointFun :: Double -> Double -> Color3 GLdouble
 colourPointFun 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPointFun m cm = fmap realToFrac $ Color3 r g b where
-	r = 0.5 + 0.5 * cos (m * cm) 
-	g = 0.5 + 0.5 * cos ((m + 16.0) * cm)
-	b = 0.5 + 0.5 * cos ((m + 32.0) * cm)
+colourPointFun m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b where
+	r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm) 
+	g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
+	b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
 {-
 -- Range based colouring, need access to the maxiter here (after refactor)
@@ -52,8 +52,12 @@ colourPointFun2 m cm = fmap realToFrac $ Color3 r g b where
 -}
 
 -- The function used to render. can be selected at runtime by the parameter cf
-colourPoint cf | cf `mod` 2 == 1 = colourPointFun
-               | cf `mod` 2 == 0 = colourPointPal
+-- FIXME: this computes a mod for each point - not good.
+{- colourPoint cf | cf `mod` 2 == 1 = colourPointFun
+                  | cf `mod` 2 == 0 = colourPointPal
+-}
+
+colourPoint cf = colourPointFun
 
 -- Colour a point outputting a GD compatiable value for png files
 colourGD :: Double -> Double -> Graphics.GD.Color

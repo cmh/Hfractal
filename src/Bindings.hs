@@ -15,16 +15,16 @@ import FracImg
 keyboardMouseAct :: IORef Mandstate -> Sz -> Key -> KeyState -> Position -> IO ()
 keyboardMouseAct ms _ (SpecialKey KeyLeft) Down _ = do
   ms' <- readIORef ms
-  modifyIORef ms (xmid ^: ((+) ( -0.05 * ms'^.range)))
+  modifyIORef ms (xmid ^: ((+) ( -0.01 * ms'^.range)))
 keyboardMouseAct ms _ (SpecialKey KeyRight) Down _ = do
   ms' <- readIORef ms
-  modifyIORef ms (xmid ^: ((+) ( 0.05 * ms'^.range)))
+  modifyIORef ms (xmid ^: ((+) ( 0.01 * ms'^.range)))
 keyboardMouseAct ms _ (SpecialKey KeyUp) Down _ = do
   ms' <- readIORef ms
-  modifyIORef ms (ymid ^: ((+) ( 0.05 * ms'^.range)))
+  modifyIORef ms (ymid ^: ((+) ( 0.01 * ms'^.range)))
 keyboardMouseAct ms _ (SpecialKey KeyDown) Down _ = do
   ms' <- readIORef ms
-  modifyIORef ms (ymid ^: ((+) ( -0.05 * ms'^.range)))
+  modifyIORef ms (ymid ^: ((+) ( -0.01 * ms'^.range)))
 keyboardMouseAct ms _ (Char '+') Down _ = do
   modifyIORef ms (range ^: (/rangemul))
 keyboardMouseAct ms _ (Char '-') Down _ = do
@@ -51,9 +51,9 @@ keyboardMouseAct ms _ (Char 'o') Down _ = do
   print ms'
 --Mouse actions
 keyboardMouseAct ms _ (MouseButton WheelUp) Down _ = do
-  modifyIORef ms (range ^: (/ (rangemul*1.05)))
+  modifyIORef ms (range ^: (/ (rangemul*1.03)))
 keyboardMouseAct ms _ (MouseButton WheelDown) Down _ = do
-  modifyIORef ms (range ^: (* (rangemul*1.05)))
+  modifyIORef ms (range ^: (* (rangemul*1.03)))
 keyboardMouseAct ms (Sz w h) (MouseButton RightButton) Down (Position x y) = do
   ms' <- readIORef ms
   modifyIORef ms ((xmid ^: ((+) ((x `mp` w) * ms'^.range ))) .

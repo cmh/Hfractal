@@ -1,0 +1,8 @@
+w 800 h 800 mi 800 ranging over [0.1, 0.11 .. 0.3]
+
+chris@chris-kubuntu:~/programming/Hfractal/src$ ./FracSpeedtest 
+23.922952s elapsed.
+10.221143s elapsed.
+chris@chris-kubuntu:~/programming/Hfractal/src$ ./FracSpeedtest +RTS -N4
+7.346125s elapsed.
+4.120257s elapsed.
