@@ -27,8 +27,6 @@ data PixArray = PixArray {
 
 initPixArray :: Int -> Int -> IO PixArray 
 initPixArray width height = do
-	putStrLn "making new pixarr"
-	putStrLn (show (Sz width height))
 	pixels <- newArray (0, width * height - 1) 0.0 :: IO Pix
 	rows <- newArray (0, height) 0.0 :: IO RowVals
 	cols <- newArray (0, width) 0.0 :: IO ColVals

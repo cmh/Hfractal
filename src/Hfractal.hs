@@ -30,9 +30,9 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 	matrixMode $= Modelview 0
 	--Set the callbacks
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
-	displayCallback $= display ms s pix ----------------------------------------
+	displayCallback $= display ms s pix
+
 --Display Callback and related functions
-----------------------------------------
 
 display :: (HasGetter g) => g Mandstate -> Sz -> PixArray -> IO ()
 display ms sz@(Sz w h) pix@(PixArray pixarr _ _ _ _ _ _ ) = do

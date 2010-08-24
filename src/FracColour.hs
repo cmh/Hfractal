@@ -43,10 +43,10 @@ colourPointFun m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b w
 	g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
+{-
 --Store a colour specified by 3 doubles as an int
 colToInt :: Double -> Double -> Double -> Int
 
-{-
 -- Range based colouring, need access to the maxiter here (after refactor)
 colourPointFun2 :: Double -> Double -> Color3 GLdouble
 colourPointFun2 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
