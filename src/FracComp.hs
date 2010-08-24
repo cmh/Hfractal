@@ -27,12 +27,14 @@ data PixArray = PixArray {
 
 initPixArray :: Int -> Int -> IO PixArray 
 initPixArray width height = do
+	putStrLn "making new pixarr"
+	putStrLn (show (Sz width height))
 	pixels <- newArray (0, width * height - 1) 0.0 :: IO Pix
-	rows <- newArray (0, width) 0.0 :: IO RowVals
-	cols <- newArray (0, height) 0.0 :: IO ColVals
+	rows <- newArray (0, height) 0.0 :: IO RowVals
+	cols <- newArray (0, width) 0.0 :: IO ColVals
 	pixelsTemp <- newArray (0, width * height - 1) 0.0 :: IO Pix
-	rowsTemp <- newArray (0, width) 0.0 :: IO RowVals
-	colsTemp <- newArray (0, height) 0.0 :: IO ColVals
+	rowsTemp <- newArray (0, height) 0.0 :: IO RowVals
+	colsTemp <- newArray (0, width) 0.0 :: IO ColVals
 	return (PixArray pixels rows cols pixelsTemp rowsTemp colsTemp (Sz width height))
 
 copyArr :: Int -> IOUArray Int Double -> IOUArray Int Double -> IO ()
@@ -47,10 +49,10 @@ copyPix :: Sz -> Pix -> Pix -> IO ()
 copyPix sz@(Sz width height) = copyArr (width * height)
 
 copyRow :: Sz -> RowVals -> RowVals -> IO ()
-copyRow sz@(Sz width height) = copyArr width
+copyRow sz@(Sz width height) = copyArr height
 
 copyCol :: Sz -> RowVals -> RowVals -> IO ()
-copyCol sz@(Sz width height) = copyArr height
+copyCol sz@(Sz width height) = copyArr width
 
 children :: MVar [MVar ()]
 children = unsafePerformIO (newMVar [])
@@ -133,7 +135,7 @@ mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)
 				then do return () :: IO ()
 				else do rc <- (readArray rows rowIndex)
 					let cy = {-# SCC "cy" #-} rng * (fi y - fi h2) / fi height + ym :: Double
-					if (rowIndex == height) 
+					if (rowIndex >= height) 
 						then do writeArray rowst y cy
 							forkChild (goRow 0 y) >> go rowIndex (y+1)
 						else if (rc < (cy - step)) 
@@ -146,12 +148,12 @@ mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)
 									--putStrLn "NoCache"
 									forkChild (goRow 0 y) >> go rowIndex (y+1)
 		goRowCache ri rc cy !colIndex !x y = do
-			if (x == width) 
+			if (x >= width) 
 				then do return () :: IO ()
 				else do cc <- (readArray cols colIndex)
 					let cx = rng * (fi x - fi w2) / fi width + xm :: Double
 					let k = x + y*width	
-					if (colIndex == width) 
+					if (colIndex >= width) 
 						then do writeArray colst x cx
 							writeArray pixt k (mandPoint cx cy mi)
 							goRowCache ri rc cy colIndex (x+1) y 
@@ -166,10 +168,10 @@ mp xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width height)
 									else do writeArray colst x cx
 										writeArray pixt k (mandPoint cx cy mi)
 										goRowCache ri rc cy colIndex (x+1) y 
-		goRow !x y  | x == width = return () :: IO ()
+		goRow !x y  | x >= width = return () :: IO ()
 					| otherwise = do	
 			writeArray pixt k (mandPoint cx cy mi)
-			writeArray colst y cx
+			writeArray colst x cx
 			goRow (x+1) y where
 				k = x + y*width
 				cx = rng * (fi x - fi w2) / fi width + xm :: Double

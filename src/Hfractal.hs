@@ -16,8 +16,8 @@ inializeScreen opts@(Options (Sz w h) _) = do
 	initialDisplayMode $= [DoubleBuffered]
 	lineSmooth  $= Enabled
 	blendFunc   $= (SrcAlpha, OneMinusSrcAlpha)
+	initialWindowSize $=  Size (fromIntegral w) (fromIntegral h)
 	createWindow "HFractal"
-	windowSize $= Size (fromIntegral (w-2)) (fromIntegral (h-1))
 	reshapeCallback $= Just (reshape opts)
 
 setCallBacks opts@(Options s@(Sz w h) state) = do
@@ -26,7 +26,7 @@ setCallBacks opts@(Options s@(Sz w h) state) = do
 	pix <- initPixArray w h
 	--Deal with the window size
 	matrixMode $= Projection
-	ortho2D 0.0 (fromIntegral (w-1)) 0.0 (fromIntegral (h-1)) 
+	ortho2D 0.0 (fromIntegral w) 0.0 (fromIntegral h)
 	matrixMode $= Modelview 0
 	--Set the callbacks
 	keyboardMouseCallback $= Just (keyboardMouse ms s)
