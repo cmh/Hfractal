@@ -8,7 +8,7 @@ import Data.List as L
 import Data.IntMap as IM
 import Data.Maybe
 import Data.Colour.Names
-import Graphics.GD
+import Unsafe.Coerce
 
 -- Create a pallette of colours with which is a map from escape iterations to colours
 createPallete :: Int -> [(Int, Colour Double)] -> IntMap (Colour Double)
@@ -38,7 +38,7 @@ colourPointPal n _ = let c = toSRGB $ colourPoint' pallete n in
 -- Colour a vertex based on the number of iterations it took to escape
 colourPointFun :: Double -> Double -> Color3 GLdouble
 colourPointFun 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPointFun m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b where
+colourPointFun m cm = {-# SCC "conversions" #-} fmap unsafeCoerce $ Color3 r g b where
 	r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm) 
 	g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
@@ -61,9 +61,3 @@ colourPointFun2 m cm = fmap realToFrac $ Color3 r g b where
 -}
 
 colourPoint cf = colourPointFun
-
--- Colour a point outputting a GD compatiable value for png files
-colourGD :: Double -> Double -> Graphics.GD.Color
-colourGD 0.0 _ = rgb 0 0 0
-colourGD n _ = let c = toSRGB24 $ colourPoint' pallete n in
-	rgb (fromIntegral $ channelRed c) (fromIntegral $ channelGreen c) (fromIntegral $ channelBlue c)
