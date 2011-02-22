@@ -1,3 +1,9 @@
+" Pathogen - needed before other files
+" {	
+	call pathogen#runtime_append_all_bundles()
+	call pathogen#helptags()
+" }
+
 " Tab/Indentation
 " {
 	set tabstop=4      "An indentation level every four columns"
@@ -46,6 +52,7 @@ let mapleader = ","
 colorscheme desert "TODO: wrap this shit in some os/bg/fg specific settings
 
 set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
+
 
 
 " UI Options
