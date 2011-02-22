@@ -53,8 +53,6 @@ colorscheme desert "TODO: wrap this shit in some os/bg/fg specific settings
 
 set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
-
-
 " UI Options
 " {
 	set ruler          "turn on line and character numbers
