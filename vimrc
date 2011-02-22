@@ -53,8 +53,6 @@ colorscheme desert "TODO: wrap this shit in some os/bg/fg specific settings
 
 set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
-
-
 " UI Options
 " {
 	set ruler          "turn on line and character numbers
@@ -82,7 +80,9 @@ set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 " Backups
 " {
 	set backup
+	silent !mkdir $HOME/.vim/backups > /dev/null 2>&1
 	set backupdir=$HOME/.vim/backups " where to put backup file
+	silent !mkdir $HOME/.vim/temp > /dev/null 2>&1
 	set directory=$HOME/.vim/temp " directory is the directory for temp file
 	set makeef=error.err " When using make, where should it dump the file
 " }
