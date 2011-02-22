@@ -50,13 +50,11 @@ set binary noeol
 " make that backspace key work the way it should
 let mapleader = ","
 colorscheme desert "TODO: wrap this shit in some os/bg/fg specific settings
+set tags=tags;/
 
-set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
 " UI Options
 " {
-	set ruler          "turn on line and character numbers
-
 	if has('cmdline_info')
 		set ruler "turn the ruler on
 		set rulerformat=%30(%=\:b%n%y%m%r%w\ %l,%c%V\ %P%)
@@ -69,12 +67,18 @@ set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 	endif
 " }
 
-" Make Arrow Keys Useful Again 
+" Custom commands
 " {
-	map <down> <ESC>:bn<RETURN>
-	map <left> <ESC>:NERDTreeToggle<RETURN>
-	map <right> <ESC>:Tlist<RETURN>
-	map <up> <ESC>:bp<RETURN>
+	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
+	cmap wro w !sudo tee %<CR><CR> "Write to read only file - WARNING use with caution
+
+	" Make Arrow Keys Useful Again 
+	" {
+		map <down> <ESC>:bn<RETURN>
+		map <left> <ESC>:NERDTreeToggle<RETURN>
+		map <right> <ESC>:Tlist<RETURN>
+		map <up> <ESC>:bp<RETURN>
+	" }
 " }
 
 " Backups
@@ -120,9 +124,10 @@ set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 	au FileType python vmap <F7> :call Python_Eval_VSplit()<cr>  
 " }
 
-" Haskell {
-	au BufEnter *.hs,*.lhs set compiler=ghc
+" Haskell { --Dependent on haskmode (vim)
+	au BufEnter *.hs,*.lhs compiler ghc
 	autocmd FileType haskell map <buffer> <leader><space> :w!<cr>:!ghc --make %<cr>:./%<cr>
+	let g:haddock_browser="/usr/bin/links"
 " }
 
 " Ruby {
