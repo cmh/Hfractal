@@ -77,12 +77,31 @@ set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 	map <up> <ESC>:bp<RETURN>
 " }
 
+" Make space / shift-space scroll in normal mode
+" {
+	noremap <S-space> <C-b>
+	noremap <space> <C-f>
+" }
+
 " Backups
 " {
 	set backup
 	set backupdir=$HOME/.vim/backups " where to put backup file
 	set directory=$HOME/.vim/temp " directory is the directory for temp file
 	set makeef=error.err " When using make, where should it dump the file
+" }
+
+" """""""""""""""""""""""
+" Plugin specific options
+" """""""""""""""""""""""
+
+" TagList Settings 
+" {
+	let Tlist_Auto_Open=0 "Let the taglist open automatically
+	let Tlist_Compact_Format = 1 "Show small menu
+	let Tlist_Ctags_Cmd = 'ctags' "Location of ctags
+	let Tlist_Exist_OnlyWindow = 1 "If you are the last, kill yourself
+	let Tlist_Sort_Type = 'name' "Order by
 " }
 
 " """""""""""""""""""""""""
@@ -119,7 +138,7 @@ set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 " }
 
 " Haskell {
-	au BufEnter *.hs,*.lhs set compiler=ghc
+	au BufEnter *.hs,*.lhs compiler ghc
 	autocmd FileType haskell map <buffer> <leader><space> :w!<cr>:!ghc --make %<cr>:./%<cr>
 " }
 
