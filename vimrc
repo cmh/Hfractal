@@ -71,6 +71,12 @@ set tags=tags;/
 " {
 	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 	cmap wro w !sudo tee %<CR><CR> "Write to read only file - WARNING use with caution
+	
+	" Make space / shift-space scroll in normal mode
+	" {
+		noremap <S-space> <C-b>
+		noremap <space> <C-f>
+	" }
 
 	" Make Arrow Keys Useful Again 
 	" {
@@ -81,11 +87,6 @@ set tags=tags;/
 	" }
 " }
 
-" Make space / shift-space scroll in normal mode
-" {
-	noremap <S-space> <C-b>
-	noremap <space> <C-f>
-" }
 
 " Backups
 " {
@@ -126,7 +127,6 @@ set tags=tags;/
 
 " Python
 " {
-	au FileType python so ~/vim_local/syntax/python.vim
 	autocmd FileType python map <buffer> <leader><space> :w!<cr>:!python %<cr>
 
 	"Python compilation
@@ -151,6 +151,6 @@ set tags=tags;/
 " }
 
 " Ruby {
-	au BufEnter *.rb,*.rhtml set shiftwidth=2
-	au BufEnter *.rb,*.rhtml set softtabstop=2
+	au BufEnter *.rb,*.rhtml,*.erb set shiftwidth=2
+	au BufEnter *.rb,*.rhtml,*.erb set softtabstop=2
 " }
