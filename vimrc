@@ -90,7 +90,10 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	nmap <leader>t :TlistToggle<CR>
 
 	" ,d to open nerd tree
-	map <leader>d <ESC>:NERDTreeToggle<RETURN>
+	map <leader>d <ESC>:NERDTreeToggle<CR>
+
+	" ,o to open CommandT
+	map <leader>o <ESC>:CommandT<CR>
 
 	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
