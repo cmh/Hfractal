@@ -51,6 +51,9 @@ set binary noeol
 let mapleader = ","
 colorscheme desert "TODO: wrap this shit in some os/bg/fg specific settings
 set tags=tags;/
+" This beauty remembers where you were the last time you edited the file, and returns to the same position.
+au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|else|exe "norm $"|endif|endif
+
 
 
 " UI Options
@@ -69,14 +72,33 @@ set tags=tags;/
 
 " Custom commands
 " {
+	" Get into edit mode more easily
+	nnoremap ; :
+	
+	" Perforce Settings
+	" {
+		",e to open for edit
+		map <leader>e :!p4 edit "%:p"<CR><CR>
+	" }
+	
+	" ,y to open Yankring
+	map <leader>y :YRShow<CR>
+
+	" ,t to open taglist
+	nmap <leader>t :TlistToggle<CR>
+
+	" ,d to open nerd tree
+	map <leader>d <ESC>:NERDTreeToggle<RETURN>
+
 	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
-	cmap wro w !sudo tee %<CR><CR> "Write to read only file - WARNING use with caution
+
+	cmap wro w !sudo tee %<CR><CR>
 
 	" Make Arrow Keys Useful Again 
 	" {
 		map <down> <ESC>:bn<RETURN>
-		map <left> <ESC>:NERDTreeToggle<RETURN>
-		map <right> <ESC>:Tlist<RETURN>
+		"map <left> <ESC>:NERDTreeToggle<RETURN>
+		"map <right> <ESC>:Tlist<RETURN>
 		map <up> <ESC>:bp<RETURN>
 	" }
 " }
