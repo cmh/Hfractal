@@ -78,8 +78,10 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	" Perforce Settings
 	" {
 		",e to open for edit
-		map <leader>e :!p4 edit "%:p"<CR><CR>
+		map <leader>pe :!p4 edit "%:p"<CR><CR>
 	" }
+
+	map <leader>ve :e! ~/.vimrc<cr>
 	
 	" ,y to open Yankring
 	map <leader>y :YRShow<CR>
@@ -107,6 +109,24 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 		"map <right> <ESC>:Tlist<RETURN>
 		map <up> <ESC>:bp<RETURN>
 	" }
+	
+	" Emacs like bindings for the command line
+	" {
+		cnoremap <C-A>		<Home>
+		cnoremap <C-E>		<End>
+		cnoremap <C-K>		<C-U>
+		cnoremap <C-P>		<Up>
+		cnoremap <C-N>		<Down>
+	" }
+	
+	" Smart movement between windows
+	" {
+		map <C-j> <C-W>j
+		map <C-k> <C-W>k
+		map <C-h> <C-W>h
+		map <C-l> <C-W>l	
+	" }
+	
 " }
 
 
@@ -117,6 +137,9 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	set backupdir=$HOME/.vim/backups " where to put backup file
 	silent !mkdir $HOME/.vim/temp > /dev/null 2>&1
 	set directory=$HOME/.vim/temp " directory is the directory for temp file
+	silent !mkdir $HOME/.vim/undodir > /dev/null 2>&1
+	"set undodir=$HOME/.vim/undodir
+	"set undofile
 	set makeef=error.err " When using make, where should it dump the file
 " }
 
@@ -133,9 +156,9 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	let Tlist_Sort_Type = 'name' "Order by
 " }
 
-" """""""""""""""""""""""""
+"""""""""""""""""""""""""""
 " Language specific options
-" """""""""""""""""""""""""
+"""""""""""""""""""""""""""
 
 " C/C++
 " {
@@ -176,3 +199,8 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	au BufEnter *.rb,*.rhtml,*.erb set shiftwidth=2
 	au BufEnter *.rb,*.rhtml,*.erb set softtabstop=2
 " }
+
+""""""""""""""""""""""""""""
+" Omnicomplete functions
+""""""""""""""""""""""""""""
+autocmd FileType css set omnifunc=csscomplete#CompleteCSS
