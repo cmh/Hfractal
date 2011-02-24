@@ -25,3 +25,6 @@
 [submodule "bundle/rails-vim"]
 	path = bundle/rails-vim
 	url = https://github.com/tpope/vim-rails.git
+[submodule "bundle/vim-surround"]
+	path = bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
