@@ -21,7 +21,7 @@
 
 " General
 " {
-	set autochdir
+	"set autochdir "Having this set hampers the utility of CommandT
 	set backspace=indent,eol,start
 	set clipboard+=unnamed "share windows clipboard	
 	set fileformats=unix,dos,mac "support all 3, in this order
@@ -74,10 +74,13 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 " {
 	" Get into edit mode more easily
 	nnoremap ; :
+
+	" Train myself to use ; instead of :
+	noremap : <NOP>
 	
 	" Perforce Settings
 	" {
-		",e to open for edit
+		",pe to open for edit
 		map <leader>pe :!p4 edit "%:p"<CR><CR>
 	" }
 
@@ -92,12 +95,12 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	" ,d to open nerd tree
 	map <leader>d <ESC>:NERDTreeToggle<CR>
 
-	" ,o to open CommandT
-	map <leader>o <ESC>:CommandT<CR>
+	" ,f to open CommandT
+	map <leader>f <ESC>:CommandT<CR>
 
 	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
-	cmap wro w !sudo tee %<CR><CR> 
+	cmap <leader>sudow w !sudo tee %<CR><CR> 
 	
 	" Make space / shift-space scroll in normal mode
 	" {
