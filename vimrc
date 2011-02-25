@@ -75,28 +75,26 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	" Get into edit mode more easily
 	nnoremap ; :
 
-	" Train myself to use ; instead of :
-	noremap : <NOP>
 	
 	" Perforce Settings
 	" {
 		",pe to open for edit
-		map <leader>pe :!p4 edit "%:p"<CR><CR>
+		map <leader>pe ;!p4 edit "%;p"<CR><CR>
 	" }
 
-	map <leader>ve :e! ~/.vimrc<cr>
+	map <leader>ve ;e! ~/.vimrc<cr>
 	
 	" ,y to open Yankring
-	map <leader>y :YRShow<CR>
+	map <leader>y ;YRShow<CR>
 
 	" ,t to open taglist
-	nmap <leader>t :TlistToggle<CR>
+	nmap <leader>t ;TlistToggle<CR>
 
 	" ,d to open nerd tree
-	map <leader>d <ESC>:NERDTreeToggle<CR>
+	map <leader>d <ESC>;NERDTreeToggle<CR>
 
 	" ,f to open CommandT
-	map <leader>f <ESC>:CommandT<CR>
+	map <leader>f <ESC>;CommandT<CR>
 
 	set pastetoggle=<F12> "Turn of indentation when pasting multiple lines
 
@@ -110,10 +108,10 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 	
 	" Make Arrow Keys Useful Again 
 	" {
-		map <down> <ESC>:bn<RETURN>
-		"map <left> <ESC>:NERDTreeToggle<RETURN>
-		"map <right> <ESC>:Tlist<RETURN>
-		map <up> <ESC>:bp<RETURN>
+		map <down> <ESC>;bn<RETURN>
+		"map <left> <ESC>;NERDTreeToggle<RETURN>
+		"map <right> <ESC>;Tlist<RETURN>
+		map <up> <ESC>;bp<RETURN>
 	" }
 	
 	" Emacs like bindings for the command line
@@ -178,26 +176,26 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 
 " Python
 " {
-	autocmd FileType python map <buffer> <leader><space> :w!<cr>:!python %<cr>
+	autocmd FileType python map <buffer> <leader><space> ;w!<cr>;!python %<cr>
 
 	"Python compilation
 	autocmd FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
 	function! Python_Eval_VSplit() range
 		let src = tempname()
 		let dst = tempname()
-		execute ": " . a:firstline . "," . a:lastline . "w " . src
-		execute ":!python " . src . " > " . dst
-		execute ":pedit! " . dst
+		execute "; " . a:firstline . "," . a:lastline . "w " . src
+		execute ";!python " . src . " > " . dst
+		execute ";pedit! " . dst
 	endfunction
 	"
 	"Map compilation to <F7>
-	au FileType python vmap <F7> :call Python_Eval_VSplit()<cr>  
+	au FileType python vmap <F7> ;call Python_Eval_VSplit()<cr>  
 " }
 
 " Haskell { --Dependent on haskmode (vim)
 " {
 	au BufEnter *.hs,*.lhs compiler ghc
-	autocmd FileType haskell map <buffer> <leader><space> :w!<cr>:!ghc --make %<cr>:./%<cr>
+	autocmd FileType haskell map <buffer> <leader><space> ;w!<cr>;!ghc --make %<cr>;./%<cr>
 	let g:haddock_browser="/usr/bin/links"
 " }
 
@@ -210,3 +208,8 @@ au BufReadPost * if line("'\"") > 0|if line("'\"") <= line("$")|exe("norm '\"")|
 " Omnicomplete functions
 """"""""""""""""""""""""""""
 autocmd FileType css set omnifunc=csscomplete#CompleteCSS
+
+
+" Train myself to use ; instead of :
+noremap : <NOP>
+" After everything to not ruin mapped commands
