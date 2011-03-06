@@ -196,9 +196,3 @@ movePoints xm ym rng mi pa@(PixArray pix rows cols pixt rowst colst sz@(Sz width
 	copyRow sz rowst rows
 	copyCol sz colst cols
 
------------------------------------------
---QuickCheck Properties
------------------------------------------
-
-prop_reflection :: Double -> Double -> Bool
-prop_reflection x y = mandPoint x y 500 == mandPoint x (-y) 500

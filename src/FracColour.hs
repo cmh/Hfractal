@@ -1,6 +1,8 @@
+{-# LANGUAGE BangPatterns #-}
 module FracColour 
 	where
 
+import Unsafe.Coerce
 import Graphics.UI.GLUT hiding (blend)--(Color3, GLdouble)
 import Data.Colour as C
 import Data.Colour.SRGB
@@ -35,13 +37,20 @@ colourPointPal 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
 colourPointPal n _ = let c = toSRGB $ colourPoint' pallete n in
 	{-# SCC "conversions" #-} fmap realToFrac $ Color3 (channelRed c) (channelGreen c) (channelBlue c)
 
+colourPointFun = colourPointFun1
+
 -- Colour a vertex based on the number of iterations it took to escape
-colourPointFun :: Double -> Double -> Color3 GLdouble
-colourPointFun 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPointFun m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b where
-	r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm) 
-	g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
-	b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
+colourPointFun1 :: Double -> Double -> Color3 GLdouble
+colourPointFun1 0.0 _ = Color3 0.0 0.0 0.0
+colourPointFun1 m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b where
+	!r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm) 
+	!g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
+	!b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
+
+colourPointFun2 :: Double -> Double -> Color3 GLdouble
+colourPointFun2 0.0 _ = Color3 0.0 0.0 0.0
+colourPointFun2 m cm = {-# SCC "conversions" #-} Color3 x x x where
+	!x = {-# SCC "x" #-} realToFrac $ (min m 255.0) / 255.0
 
 {-
 --Store a colour specified by 3 doubles as an int
