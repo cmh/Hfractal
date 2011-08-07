@@ -1,5 +1,5 @@
 {-# LANGUAGE BangPatterns #-}
-module FracColour 
+module FracColour
 	where
 
 import Unsafe.Coerce
@@ -11,12 +11,13 @@ import Data.IntMap as IM
 import Data.Maybe
 import Data.Colour.Names
 import Graphics.GD
+import Data.Ord (comparing)
 
 -- Create a pallette of colours with which is a map from escape iterations to colours
 createPallete :: Int -> [(Int, Colour Double)] -> IntMap (Colour Double)
-createPallete maxIter points | length points < 2 || maximum (L.map fst points) > maxIter 
+createPallete maxIter points | length points < 2 || maximum (L.map fst points) > maxIter
                                                  || minimum (L.map fst points) < 0 = error "Invalid pallete reference points"
-							 | otherwise  = fromList (interpolate $ sortBy (\x y -> fst x `compare` fst y) points)
+							 | otherwise  = fromList (interpolate $ sortBy (\x y -> Data.Ord.comparing fst x y) points)
 
 interpolate :: [(Int, Colour Double)] -> [(Int, Colour Double)]
 interpolate [(_,_)] = []
@@ -33,24 +34,28 @@ pallete = createPallete 5002 [(0,red), (200, white), (1600, yellow), (2000, blen
                               (2500, darken 0.2 orange), (3200, blend 0.7 orange black), (4400, white), (5002, red)]
 
 colourPointPal :: Double -> Double -> Color3 GLdouble
-colourPointPal 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
+colourPointPal 0.0 _ = fmap doubleToGLdouble $ Color3 0.0 0.0 0.0
 colourPointPal n _ = let c = toSRGB $ colourPoint' pallete n in
-	{-# SCC "conversions" #-} fmap realToFrac $ Color3 (channelRed c) (channelGreen c) (channelBlue c)
+	{-# SCC "conversions" #-} fmap doubleToGLdouble $ Color3 (channelRed c) (channelGreen c) (channelBlue c)
+
+
+doubleToGLdouble :: Double -> GLdouble
+doubleToGLdouble = unsafeCoerce --This is neccesary as realToFrac is very slow (esp. in 7.x), the indirection will allow easier refactoring
 
 colourPointFun = colourPointFun1
 
 -- Colour a vertex based on the number of iterations it took to escape
 colourPointFun1 :: Double -> Double -> Color3 GLdouble
 colourPointFun1 0.0 _ = Color3 0.0 0.0 0.0
-colourPointFun1 m cm = {-# SCC "conversions" #-} fmap realToFrac $ Color3 r g b where
-	!r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm) 
+colourPointFun1 m cm = {-# SCC "conversions" #-} fmap doubleToGLdouble $ Color3 r g b where
+	!r = {-# SCC "red" #-} 0.5 + 0.5 * cos (m * cm)
 	!g = {-# SCC "green" #-} 0.5 + 0.5 * cos ((m + 16.0) * cm)
 	!b = {-# SCC "blue" #-} 0.5 + 0.5 * cos ((m + 32.0) * cm)
 
 colourPointFun2 :: Double -> Double -> Color3 GLdouble
 colourPointFun2 0.0 _ = Color3 0.0 0.0 0.0
 colourPointFun2 m cm = {-# SCC "conversions" #-} Color3 x x x where
-	!x = {-# SCC "x" #-} realToFrac $ (min m 255.0) / 255.0
+	!x = {-# SCC "x" #-} doubleToGLdouble $ (min m 255.0) / 255.0
 
 {-
 --Store a colour specified by 3 doubles as an int
@@ -58,8 +63,8 @@ colToInt :: Double -> Double -> Double -> Int
 
 -- Range based colouring, need access to the maxiter here (after refactor)
 colourPointFun2 :: Double -> Double -> Color3 GLdouble
-colourPointFun2 0.0 _ = fmap realToFrac $ Color3 0.0 0.0 0.0
-colourPointFun2 m cm = fmap realToFrac $ Color3 r g b where
+colourPointFun2 0.0 _ = fmap doubleToGLdouble $ Color3 0.0 0.0 0.0
+colourPointFun2 m cm = fmap doubleToGLdouble $ Color3 r g b where
 	frac = fromIntegral m / fromIntegral maxIter
 -}
 
