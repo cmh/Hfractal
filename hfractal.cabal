@@ -1,5 +1,5 @@
 name:                hfractal
-version:             0.4.2.4
+version:             0.4.2.5
 cabal-version:       >= 1.2
 synopsis:            OpenGL fractal renderer
 description:         An OpenGL fractal browser with multicore support and the capability to output high quality png images.
@@ -15,7 +15,7 @@ extra-source-files:  README
 
 Executable hfractal
     main-is:            Hfractal.hs
-    build-depends:      base >= 4,
+    build-depends:      base >= 4 && < 5,
                         array, 
                         gd,
                         data-accessor,
