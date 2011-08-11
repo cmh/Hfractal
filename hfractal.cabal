@@ -27,4 +27,5 @@ Executable hfractal
                         containers
     other-Modules:      FracComp, FracColour, FracImg, FracState, Bindings, PointComp
     ghc-options:        -O2 -threaded -rtsopts
+    ghc-prof-options:   -prof -auto-all -caf-all -osuf=FracState.o
     Hs-Source-Dirs:     src

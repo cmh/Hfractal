@@ -11,11 +11,11 @@ import Data.Array.IO hiding (range)
 import System.IO
 import Graphics.Rendering.OpenGL
 
-supSamp = 1       --Use subpixel sampling
-imgMaxIter = 35 --High iteration for the output image
-w = 500		  --High resolution for the output image
-h = 500
-filepath = "." :: FilePath
+supSamp     = 2       --Use subpixel sampling
+imgMaxIter  = 6000 --High iteration for the output image
+w           = 1600		  --High resolution for the output image
+h           = 900
+filepath    = "." :: FilePath
 
 --Convert a GL Colour datatype to a GD Colour datatype
 convColour :: Color3 GLdouble -> Graphics.GD.Color

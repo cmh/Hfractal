@@ -7,3 +7,6 @@ UI design:
 	GUI
 	button to reset position
 	button to cycle through fractal types
+
+
+Channel based IO and move the colour computation into the main threaded computation
