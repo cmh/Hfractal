@@ -8,5 +8,7 @@ UI design:
 	button to reset position
 	button to cycle through fractal types
 
-
-Channel based IO and move the colour computation into the main threaded computation
+Things I want to do in the immediate future:
+    - Move to Vector
+    - Move the concurrent code to a chan based producer/consumer model
+    - Colour on the shader - write to textures instead of using gldrawpoints

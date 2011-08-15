@@ -24,7 +24,7 @@ Executable fracspeedtest
     ghc-options:        -O2 -threaded -rtsopts
     Hs-Source-Dirs:     ../src
 
-Executable fracspeedtestopt
+Executable fracspeedtestllvm
     main-is:            FracSpeedtest.hs
-    ghc-options:        -O2 -threaded -fvia-C -rtsopts -fllvm
+    ghc-options:        -O2 -threaded -rtsopts -fllvm
     Hs-Source-Dirs:     ../src
